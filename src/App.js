@@ -1,6 +1,20 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import * as firebase from "firebase/app";
+
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+
+function signOut() {
+  firebase
+    .auth()
+    .signOut()
+    .then(function() {
+      document.location.reload();
+    })
+    .catch(function(error) {
+      throw error;
+    });
+}
 
 function App() {
   return (
@@ -18,6 +32,7 @@ function App() {
         >
           Learn React
         </a>
+        <button onClick={signOut}>Logg ut</button>
       </header>
     </div>
   );
