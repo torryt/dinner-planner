@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
+import { Route, Link } from "react-router-dom";
 
 import {
   AppBar as MuiAppBar,
@@ -9,18 +10,49 @@ import {
   Menu,
   MenuItem,
   ListItemIcon,
-  Typography
+  Typography,
+  useTheme
 } from "@material-ui/core";
-import { AccountCircle, ExitToApp } from "@material-ui/icons";
+import { AccountCircle, ExitToApp, ArrowBack } from "@material-ui/icons";
 import { firebase } from "../firebase";
+import { TypographyProps } from "@material-ui/core/Typography";
 
 const StyledToolbar = styled(Toolbar)`
   justify-content: space-between;
 `;
 
-const Heading = styled(Typography)`
+function Heading(props: TypographyProps) {
+  const { children, ...restProps } = props;
+  return (
+    <Typography variant="h6" component="h1" {...restProps}>
+      {children}
+    </Typography>
+  );
+}
+const StyledHeading = styled(Heading)`
   flex-grow: 1;
 `;
+
+const CenteredHeading = styled(Heading)`
+  flex-grow: 1;
+  text-align: center;
+`;
+
+function BackLink() {
+  const theme = useTheme();
+  return (
+    <IconButton
+      edge="start"
+      component={() => (
+        <Link to="/">
+          <span style={{ color: theme.palette.common.white }}>
+            <ArrowBack />
+          </span>
+        </Link>
+      )}
+    />
+  );
+}
 
 function signOut() {
   firebase
@@ -54,6 +86,21 @@ function AppBar() {
   return (
     <MuiAppBar position="static">
       <StyledToolbar>
+        <Route
+          exact
+          path="/recipes/add"
+          component={() => (
+            <>
+              <BackLink />
+              <CenteredHeading>Legg til oppskrift</CenteredHeading>
+            </>
+          )}
+        />
+        <Route
+          exact
+          path="/"
+          component={() => <StyledHeading>Oppskrifter</StyledHeading>}
+        />
         {auth.currentUser && (
           <div>
             <IconButton
@@ -89,9 +136,6 @@ function AppBar() {
             </Menu>
           </div>
         )}
-        <Heading variant="h6" component="h1">
-          Oppskrifter
-        </Heading>
       </StyledToolbar>
     </MuiAppBar>
   );

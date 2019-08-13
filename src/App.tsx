@@ -36,9 +36,10 @@ function App() {
           <>
             {CssBaseline}
             <AppBar />
-            <Container />
-            <Route exact path="/" component={RecipeList} />
-            <Route path="/recipes/add" component={AddRecipe} />
+            <Container>
+              <Route exact path="/" component={RecipeList} />
+              <Route path="/recipes/add" component={AddRecipe} />
+            </Container>
           </>
         </StylesProvider>
       </ThemeProvider>

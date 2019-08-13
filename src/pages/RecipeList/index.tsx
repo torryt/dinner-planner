@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-// import styled, { css } from "styled-components";
 import styled from "styled-components";
+import { Link as RouterLink } from "react-router-dom";
 
 import { List, ListItem, ListItemText, Fab } from "@material-ui/core";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { AvTimer, Add, AddShoppingCartOutlined } from "@material-ui/icons";
 
 import { firebase } from "../../firebase";
-import { Container } from "../../components/Container";
 import { Recipe } from "../../types";
 
 const db = firebase.firestore();
@@ -17,7 +16,7 @@ const StyledList = styled(List)`
   width: calc(100% + 2rem);
 `;
 
-const ListSecondary = styled.div`
+const ListSecondary = styled.span`
   display: flex;
   align-items: center;
 `;
@@ -104,19 +103,17 @@ function RecipeList() {
   const classes = useStyles();
 
   return (
-    <Container>
-      <>
-        <StyledList>{recipeComponents}</StyledList>
-        <Fab
-          className={classes.fab}
-          color="primary"
-          aria-label="legg til ny oppskrift"
-          component="a"
-        >
-          <Add />
-        </Fab>
-      </>
-    </Container>
+    <>
+      <StyledList>{recipeComponents}</StyledList>
+      <Fab
+        className={classes.fab}
+        color="primary"
+        aria-label="legg til ny oppskrift"
+        component={props => <RouterLink to="/recipes/add" {...props} />}
+      >
+        <Add />
+      </Fab>
+    </>
   );
 }
 
