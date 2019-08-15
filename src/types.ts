@@ -1,9 +1,12 @@
 export interface Ingredient {
   name: string;
+  measurementUnit: string;
+  quantity: string;
 }
 
 export interface Recipe {
+  id?: string;
   name: string;
-  minutesToCook: number;
   ingredients: Ingredient[];
+  minutesToCook: number;
 }

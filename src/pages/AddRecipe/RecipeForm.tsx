@@ -1,31 +1,20 @@
 import React from "react";
 import styled from "styled-components";
-import { Form, Field, FieldArray, FormikProps, FieldProps } from "formik";
-import { TextField } from "formik-material-ui";
-import {
-  Typography,
-  Select,
-  MenuItem,
-  IconButton,
-  Button,
-  Fab
-} from "@material-ui/core";
-import { SelectProps } from "@material-ui/core/Select";
+import { Form, Field, FieldArray, FormikProps } from "formik";
+import { TextField, TextFieldProps } from "formik-material-ui";
+import { Select, MenuItem, Button, IconButton } from "@material-ui/core";
 
 import { TimeSlider } from "./TimeSlider";
-import { PlusOneOutlined, Add } from "@material-ui/icons";
+import { Delete } from "@material-ui/icons";
+import { Recipe } from "types";
 
 const StyledField = styled(Field)`
   margin-bottom: 3rem;
 `;
 
-const StyledTimeSlider = styled(TimeSlider)`
-  margin-bottom: 2rem;
-`;
-
 const IngredientRow = styled.div`
   display: flex;
-  align-items: bottom;
+  align-items: flex-end;
 `;
 
 const QuantityField = styled(Field)`
@@ -38,18 +27,17 @@ const MeasurementUnitSelect = styled(Select)`
   min-width: 100px;
 `;
 
-export interface Ingredient {
-  name: string;
-  measurementUnit: string;
-  quantity: string;
-}
+const SubmitButton = styled(Button)``;
 
-export interface RecipeFormValues {
-  name: string;
-  ingredients: Ingredient[];
-  minutesToCook: number;
-}
-function RecipeForm(props: FormikProps<RecipeFormValues>) {
+const AddIngredientButton = styled(Button)`
+  margin: 1rem 0 2rem;
+`;
+
+const FullWidthTextField = (props: TextFieldProps) => (
+  <TextField {...props} fullWidth />
+);
+
+function RecipeForm(props: FormikProps<Recipe>) {
   const values = props.values;
   return (
     <Form>
@@ -57,87 +45,95 @@ function RecipeForm(props: FormikProps<RecipeFormValues>) {
         name="name"
         label="Navn på retten"
         type="text"
-        component={TextField}
+        component={FullWidthTextField}
       />
 
-      {/* <Typography id="discrete-slider" gutterBottom>
-        Tilberedningstid?
-      </Typography> */}
-      <StyledTimeSlider />
-
-      {/* <Heading component="h2" variant="h6">
-        Ingredienser
-      </Heading> */}
+      <TimeSlider
+        onChange={(_, value) => props.setFieldValue("minutesToCook", value)}
+        onBlur={() => props.setFieldTouched("minutesToCook")}
+        value={props.values.minutesToCook}
+        name="minutesToCook"
+      />
       <FieldArray
         name="ingredients"
         render={arrayHelpers => (
-          <div>
-            {values && values.ingredients.length > 0 ? (
-              values.ingredients.map((ingredient, index) => (
-                <IngredientRow key={index}>
-                  <QuantityField
-                    name={`ingredients.${index}.quantity`}
-                    label="Antall"
-                    type="number"
-                    component={TextField}
-                  />
-                  <MeasurementUnitSelect
-                    // native
-                    value={ingredient.measurementUnit}
-                    onChange={props.handleChange(
-                      `ingredients.${index}.measurementUnit`
-                    )}
-                    onBlur={props.handleBlur(
-                      `ingredients.${index}.measurementUnit`
-                    )}
-                    inputProps={{
-                      name: `ingredients.${index}.measurementUnit`,
-                      id: `ingredients.${index}.measurementUnit`
-                    }}
+          <>
+            {values.ingredients.map((ingredient, index) => (
+              <IngredientRow key={index}>
+                <QuantityField
+                  name={`ingredients.${index}.quantity`}
+                  label="Antall"
+                  type="number"
+                  component={TextField}
+                />
+                <MeasurementUnitSelect
+                  value={ingredient.measurementUnit}
+                  onChange={props.handleChange(
+                    `ingredients.${index}.measurementUnit`
+                  )}
+                  onBlur={props.handleBlur(
+                    `ingredients.${index}.measurementUnit`
+                  )}
+                  inputProps={{
+                    name: `ingredients.${index}.measurementUnit`,
+                    id: `ingredients.${index}.measurementUnit`
+                  }}
+                >
+                  <MenuItem value="stk">Stk</MenuItem>
+                  <MenuItem value="dl">Desiliter</MenuItem>
+                  <MenuItem value="l">Liter</MenuItem>
+                  <MenuItem value="kg">Kilo</MenuItem>
+                  <MenuItem value="gram">Gram</MenuItem>
+                  <MenuItem value="ts">Teskjeer</MenuItem>
+                  <MenuItem value="ss">Spiseskjeer</MenuItem>
+                  <MenuItem value="pose">Pose</MenuItem>
+                  <MenuItem value="pakke">Pakke</MenuItem>
+                  <MenuItem value="klype">Klype</MenuItem>
+                </MeasurementUnitSelect>
+                <Field
+                  name={`ingredients.${index}.name`}
+                  label="Navn"
+                  component={TextField}
+                />
+                {index !== 0 && (
+                  <IconButton
+                    aria-label="delete"
+                    onClick={() => arrayHelpers.remove(index)}
+                    size="small"
                   >
-                    {/* <option value="stk">Stk</option>
-                    <option value="dl">Desiliter</option>
-                    <option value="l">Liter</option>
-                    <option value="kg">Kilo</option>
-                    <option value="gram">Gram</option>
-                    <option value="ts">Teskjeer</option>
-                    <option value="ss">Spiseskjeer</option>
-                    <option value="pose">Pose</option>
-                    <option value="pakke">Pakke</option>
-                    <option value="klype">Klype</option> */}
-
-                    <MenuItem value="stk">Stk</MenuItem>
-                    <MenuItem value="dl">Desiliter</MenuItem>
-                    <MenuItem value="l">Liter</MenuItem>
-                    <MenuItem value="kg">Kilo</MenuItem>
-                    <MenuItem value="gram">Gram</MenuItem>
-                    <MenuItem value="ts">Teskjeer</MenuItem>
-                    <MenuItem value="ss">Spiseskjeer</MenuItem>
-                    <MenuItem value="pose">Pose</MenuItem>
-                    <MenuItem value="pakke">Pakke</MenuItem>
-                    <MenuItem value="klype">Klype</MenuItem>
-                  </MeasurementUnitSelect>
-                  <Field
-                    name={`ingredients.${index}.name`}
-                    label="Navn"
-                    component={TextField}
-                  />
-                </IngredientRow>
-              ))
-            ) : (
-              <div>Hello</div>
-            )}
+                    <Delete fontSize="small" />
+                  </IconButton>
+                )}
+              </IngredientRow>
+            ))}
             <div>
-              <Button variant="outlined" color="secondary">
+              <AddIngredientButton
+                aria-label="Legg til ingrediens"
+                variant="outlined"
+                color="secondary"
+                onClick={() =>
+                  arrayHelpers.push({
+                    name: "",
+                    measurementUnit: "stk",
+                    quantity: ""
+                  })
+                }
+              >
                 Legg til ingrediens
-              </Button>
+              </AddIngredientButton>
             </div>
-          </div>
+          </>
         )}
       />
-      <Button variant="contained" color="primary">
+      <SubmitButton
+        type="submit"
+        disabled={props.isSubmitting}
+        aria-label="Lagre oppskrift"
+        variant="contained"
+        color="primary"
+      >
         Lagre oppskrift
-      </Button>
+      </SubmitButton>
     </Form>
   );
 }

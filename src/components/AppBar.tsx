@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
-import { Route, Link } from "react-router-dom";
+import { Route } from "react-router-dom";
 
 import {
   AppBar as MuiAppBar,
@@ -16,6 +16,7 @@ import {
 import { AccountCircle, ExitToApp, ArrowBack } from "@material-ui/icons";
 import { firebase } from "../firebase";
 import { TypographyProps } from "@material-ui/core/Typography";
+import { AdapterLink } from "./Link";
 
 const StyledToolbar = styled(Toolbar)`
   justify-content: space-between;
@@ -41,16 +42,11 @@ const CenteredHeading = styled(Heading)`
 function BackLink() {
   const theme = useTheme();
   return (
-    <IconButton
-      edge="start"
-      component={() => (
-        <Link to="/">
-          <span style={{ color: theme.palette.common.white }}>
-            <ArrowBack />
-          </span>
-        </Link>
-      )}
-    />
+    <IconButton edge="start" to="/" component={AdapterLink}>
+      <span style={{ color: theme.palette.common.white }}>
+        <ArrowBack />
+      </span>
+    </IconButton>
   );
 }
 

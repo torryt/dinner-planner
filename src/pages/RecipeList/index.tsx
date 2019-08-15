@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Link as RouterLink } from "react-router-dom";
 
-import { List, ListItem, ListItemText, Fab } from "@material-ui/core";
+import { List, Fab } from "@material-ui/core";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { AvTimer, Add, AddShoppingCartOutlined } from "@material-ui/icons";
 
 import { firebase } from "../../firebase";
 import { Recipe } from "../../types";
+import { RecipeListItem } from "./RecipeListItem";
+import { AdapterLink } from "components/Link";
 
 const db = firebase.firestore();
 
@@ -16,17 +17,17 @@ const StyledList = styled(List)`
   width: calc(100% + 2rem);
 `;
 
-const ListSecondary = styled.span`
+export const ListSecondary = styled.span`
   display: flex;
   align-items: center;
 `;
 
-const StyledAvTimer = styled(AvTimer)`
+export const StyledAvTimer = styled(AvTimer)`
   margin-right: 6px;
   font-size: 1.4em;
 `;
 
-const StyledAddShoppingCart = styled(AddShoppingCartOutlined)`
+export const StyledAddShoppingCart = styled(AddShoppingCartOutlined)`
   margin-right: 6px;
   font-size: 1.4em;
 `;
@@ -41,36 +42,15 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const RecipeInfo = styled.span`
+export const RecipeInfo = styled.span`
   margin-right: 16px;
   display: flex;
   align-items: center;
 `;
 
-interface RecipeComponentProps {
+export interface RecipeComponentProps {
   recipe: Recipe;
 }
-function RecipeComponent(props: RecipeComponentProps) {
-  return (
-    <ListItem button component="a">
-      <ListItemText
-        primary={props.recipe.name}
-        secondary={
-          <ListSecondary>
-            <StyledAvTimer />
-            {props.recipe.minutesToCook} min
-            <RecipeInfo />
-            <RecipeInfo>
-              <StyledAddShoppingCart />
-              {props.recipe.ingredients.length} ingr.
-            </RecipeInfo>
-          </ListSecondary>
-        }
-      />
-    </ListItem>
-  );
-}
-
 function RecipeList() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
 
@@ -87,9 +67,10 @@ function RecipeList() {
               .where("recipeCollectionId", "==", recipeCollectionId)
               .get()
               .then(querySnapshot => {
-                const recipes = querySnapshot.docs.map(x =>
-                  x.data()
-                ) as Recipe[];
+                const recipes = querySnapshot.docs.map(x => ({
+                  ...x.data(),
+                  id: x.id
+                })) as Recipe[];
                 setRecipes(recipes);
               });
           });
@@ -98,7 +79,7 @@ function RecipeList() {
   }, []);
 
   const recipeComponents = recipes.map(x => (
-    <RecipeComponent recipe={x} key={x.name} />
+    <RecipeListItem recipe={x} key={x.name} />
   ));
   const classes = useStyles();
 
@@ -109,7 +90,8 @@ function RecipeList() {
         className={classes.fab}
         color="primary"
         aria-label="legg til ny oppskrift"
-        component={props => <RouterLink to="/recipes/add" {...props} />}
+        to="/recipes/add"
+        component={AdapterLink}
       >
         <Add />
       </Fab>

@@ -1,7 +1,9 @@
 import React from "react";
 import { Formik, FormikProps } from "formik";
+import { Recipe } from "types";
 
-import { RecipeForm, RecipeFormValues } from "./RecipeForm";
+import { RecipeForm } from "./RecipeForm";
+import { submitRecipe } from "./submitRecipe";
 
 function AddRecipe() {
   return (
@@ -14,36 +16,22 @@ function AddRecipe() {
               name: "",
               measurementUnit: "stk",
               quantity: ""
-            },
-            {
-              name: "",
-              measurementUnit: "stk",
-              quantity: ""
-            },
-            {
-              name: "",
-              measurementUnit: "stk",
-              quantity: ""
             }
           ],
-          minutesToCook: 20
+          minutesToCook: 25
         }}
-        validate={(values: RecipeFormValues) => {
+        validate={(values: Recipe) => {
           let errors: any = {};
           if (!values.name) {
             errors.name = "Obligatorisk";
           }
           return errors;
         }}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 400);
+        onSubmit={async (values, { setSubmitting }) => {
+          await submitRecipe(values);
+          setSubmitting(false);
         }}
-        render={(props: FormikProps<RecipeFormValues>) => (
-          <RecipeForm {...props} />
-        )}
+        render={(props: FormikProps<Recipe>) => <RecipeForm {...props} />}
       />
     </>
   );
