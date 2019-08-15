@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 
-import { List, Fab } from "@material-ui/core";
+import { List, Fab, CircularProgress } from "@material-ui/core";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { AvTimer, Add, AddShoppingCartOutlined } from "@material-ui/icons";
 
-import { firebase } from "../../firebase";
 import { Recipe } from "../../types";
 import { RecipeListItem } from "./RecipeListItem";
 import { AdapterLink } from "components/Link";
-
-const db = firebase.firestore();
+import { useFetchCollection } from "hooks/useFetchCollection";
 
 const StyledList = styled(List)`
   margin-left: -1rem;
@@ -48,41 +46,30 @@ export const RecipeInfo = styled.span`
   align-items: center;
 `;
 
+const ProgressWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 4rem;
+`;
+
 export interface RecipeComponentProps {
   recipe: Recipe;
 }
 function RecipeList() {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-
-  useEffect(() => {
-    const currentUser = firebase.auth().currentUser;
-    if (currentUser) {
-      db.collection("recipeCollections")
-        .where("ownerId", "==", currentUser.uid)
-        .get()
-        .then(querySnapshot => {
-          const recipeCollections = querySnapshot.docs.map(x => x.id);
-          recipeCollections.forEach(recipeCollectionId => {
-            db.collection("recipes")
-              .where("recipeCollectionId", "==", recipeCollectionId)
-              .get()
-              .then(querySnapshot => {
-                const recipes = querySnapshot.docs.map(x => ({
-                  ...x.data(),
-                  id: x.id
-                })) as Recipe[];
-                setRecipes(recipes);
-              });
-          });
-        });
-    }
-  }, []);
+  const [recipes, isPending] = useFetchCollection<Recipe>("recipes");
 
   const recipeComponents = recipes.map(x => (
     <RecipeListItem recipe={x} key={x.name} />
   ));
   const classes = useStyles();
 
+  if (isPending) {
+    return (
+      <ProgressWrapper>
+        <CircularProgress size={60} />
+      </ProgressWrapper>
+    );
+  }
   return (
     <>
       <StyledList>{recipeComponents}</StyledList>

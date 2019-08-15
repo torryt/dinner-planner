@@ -83,12 +83,19 @@ function AppBar() {
     <MuiAppBar position="static">
       <StyledToolbar>
         <Route
-          exact
           path="/recipes/add"
           component={() => (
             <>
               <BackLink />
               <CenteredHeading>Legg til oppskrift</CenteredHeading>
+            </>
+          )}
+        />
+        <Route
+          path="/recipes/:id"
+          component={() => (
+            <>
+              <BackLink />
             </>
           )}
         />

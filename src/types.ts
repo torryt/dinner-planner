@@ -10,3 +10,5 @@ export interface Recipe {
   ingredients: Ingredient[];
   minutesToCook: number;
 }
+
+export type WhereFilterOp = "<" | "<=" | "==" | ">=" | ">" | "array-contains";
