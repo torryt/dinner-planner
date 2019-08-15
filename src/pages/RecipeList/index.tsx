@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { List, Fab, CircularProgress } from "@material-ui/core";
+import { List, Fab } from "@material-ui/core";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { AvTimer, Add, AddShoppingCartOutlined } from "@material-ui/icons";
 

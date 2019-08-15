@@ -3,6 +3,7 @@ import { WhereFilterOp } from "../types";
 
 import { firebase } from "../firebase";
 
+const requestTimeBeforePending = 600;
 const db = firebase.firestore();
 
 function useFetchCollection<T>(
@@ -20,7 +21,7 @@ function useFetchCollection<T>(
       setSuccess(false);
       const timeoutRef = setTimeout(() => {
         setPending(true);
-      }, 400);
+      }, requestTimeBeforePending);
 
       let ref: any = db.collection(collection);
       if (filter) {

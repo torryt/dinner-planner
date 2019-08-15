@@ -1,6 +1,5 @@
 import React from "react";
 import { RouteComponentProps } from "react-router";
-import { useFetchCollection } from "hooks/useFetchCollection";
 import { useFetchDocument } from "hooks/useFetchDocument";
 
 import { Typography } from "@material-ui/core";
@@ -9,10 +8,7 @@ import { Recipe } from "types";
 import { PageProgress } from "components/PageProgress";
 
 function RecipeDetails({ match }: RouteComponentProps<{ id: string }>) {
-  const [recipe, isPending] = useFetchDocument<Recipe>(
-    "recipes",
-    match.params.id
-  );
+  const [recipe] = useFetchDocument<Recipe>("recipes", match.params.id);
   if (!recipe) {
     return <PageProgress />;
   }

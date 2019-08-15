@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { WhereFilterOp } from "../types";
-
 import { firebase } from "../firebase";
 
+const requestTimeBeforePending = 600;
 const db = firebase.firestore();
 
 function useFetchDocument<T>(collection: string, document: string) {
@@ -17,7 +16,7 @@ function useFetchDocument<T>(collection: string, document: string) {
       setSuccess(false);
       const timeoutRef = setTimeout(() => {
         setPending(true);
-      }, 400);
+      }, requestTimeBeforePending);
 
       let ref = db.collection(collection).doc(document);
 
