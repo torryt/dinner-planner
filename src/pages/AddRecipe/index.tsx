@@ -11,6 +11,7 @@ function AddRecipe() {
       <Formik
         initialValues={{
           name: "",
+          description: "",
           ingredients: [
             {
               name: "",
@@ -23,6 +24,9 @@ function AddRecipe() {
         validate={(values: Recipe) => {
           let errors: any = {};
           if (!values.name) {
+            errors.name = "Obligatorisk";
+          }
+          if (!values.description) {
             errors.name = "Obligatorisk";
           }
           return errors;

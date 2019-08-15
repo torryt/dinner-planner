@@ -2,7 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import { Form, Field, FieldArray, FormikProps } from "formik";
 import { TextField, TextFieldProps } from "formik-material-ui";
-import { Select, MenuItem, Button, IconButton } from "@material-ui/core";
+import {
+  Select,
+  MenuItem,
+  Button,
+  IconButton,
+  Typography
+} from "@material-ui/core";
 
 import { TimeSlider } from "./TimeSlider";
 import { Delete } from "@material-ui/icons";
@@ -31,6 +37,10 @@ const SubmitButton = styled(Button)``;
 
 const AddIngredientButton = styled(Button)`
   margin: 1rem 0 2rem;
+`;
+
+const TextAreaWrapper = styled.div`
+  margin-bottom: 1rem;
 `;
 
 const FullWidthTextField = (props: TextFieldProps) => (
@@ -125,6 +135,19 @@ function RecipeForm(props: FormikProps<Recipe>) {
           </>
         )}
       />
+      <TextAreaWrapper>
+        <Typography variant="h6" component="h2">
+          Beskrivelse
+        </Typography>
+        <Field
+          name="description"
+          label="Beskrivelse"
+          render={(props: TextFieldProps) => (
+            <TextField {...props} multiline fullWidth rows={8} />
+          )}
+        />
+      </TextAreaWrapper>
+
       <SubmitButton
         type="submit"
         disabled={props.isSubmitting}

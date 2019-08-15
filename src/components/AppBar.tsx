@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
 import {
   AppBar as MuiAppBar,
@@ -82,28 +82,31 @@ function AppBar() {
   return (
     <MuiAppBar position="static">
       <StyledToolbar>
-        <Route
-          path="/recipes/add"
-          component={() => (
-            <>
-              <BackLink />
-              <CenteredHeading>Legg til oppskrift</CenteredHeading>
-            </>
-          )}
-        />
-        <Route
-          path="/recipes/:id"
-          component={() => (
-            <>
-              <BackLink />
-            </>
-          )}
-        />
-        <Route
-          exact
-          path="/"
-          component={() => <StyledHeading>Oppskrifter</StyledHeading>}
-        />
+        <Switch>
+          <Route
+            path="/recipes/add"
+            component={() => (
+              <>
+                <BackLink />
+                <CenteredHeading>Legg til oppskrift</CenteredHeading>
+              </>
+            )}
+          />
+          <Route
+            exact
+            path="/recipes/:id"
+            component={() => (
+              <>
+                <BackLink />
+              </>
+            )}
+          />
+          <Route
+            exact
+            path="/"
+            component={() => <StyledHeading>Oppskrifter</StyledHeading>}
+          />
+        </Switch>
         {auth.currentUser && (
           <div>
             <IconButton

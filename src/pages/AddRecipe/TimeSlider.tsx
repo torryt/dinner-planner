@@ -12,6 +12,12 @@ const Header = styled.div`
   justify-content: space-between;
 `;
 
+const Minutes = styled.span`
+  font-weight: bold;
+  font-size: 1.5em;
+  color: #4e4e4e;
+`;
+
 interface TimeSliderProps {
   onChange: (event: React.ChangeEvent<{}>, value: number | number[]) => void;
   onBlur: (event: React.FocusEvent<HTMLSpanElement>) => void;
@@ -24,7 +30,9 @@ function TimeSlider(props: TimeSliderProps) {
     <>
       <Header>
         <Typography id={name}>Tilberedningstid</Typography>
-        {`${value} minutter`}
+        <span>
+          <Minutes>{value}</Minutes> minutter
+        </span>
       </Header>
       <Slider
         onChange={onChange}

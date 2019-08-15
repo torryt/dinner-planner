@@ -8,6 +8,7 @@ import { AvTimer, Add, AddShoppingCartOutlined } from "@material-ui/icons";
 import { Recipe } from "../../types";
 import { RecipeListItem } from "./RecipeListItem";
 import { AdapterLink } from "components/Link";
+import { PageProgress } from "components/PageProgress";
 import { useFetchCollection } from "hooks/useFetchCollection";
 
 const StyledList = styled(List)`
@@ -46,12 +47,6 @@ export const RecipeInfo = styled.span`
   align-items: center;
 `;
 
-const ProgressWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 4rem;
-`;
-
 export interface RecipeComponentProps {
   recipe: Recipe;
 }
@@ -64,11 +59,7 @@ function RecipeList() {
   const classes = useStyles();
 
   if (isPending) {
-    return (
-      <ProgressWrapper>
-        <CircularProgress size={60} />
-      </ProgressWrapper>
-    );
+    return <PageProgress />;
   }
   return (
     <>

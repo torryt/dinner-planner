@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import { StylesProvider, ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
@@ -38,9 +38,11 @@ function App() {
             <CssBaseline />
             <AppBar />
             <Container maxWidth="sm">
-              <Route exact path="/" component={RecipeList} />
-              <Route path="/recipes/add" component={AddRecipe} />
-              <Route path="/recipes/:id" component={RecipeDetails} />
+              <Switch>
+                <Route exact path="/" component={RecipeList} />
+                <Route path="/recipes/add" component={AddRecipe} />
+                <Route path="/recipes/:id" component={RecipeDetails} />
+              </Switch>
             </Container>
           </>
         </StylesProvider>
