@@ -10,6 +10,7 @@ import { AddRecipe } from "./pages/AddRecipe";
 import { AppBar } from "./components/AppBar";
 import { Container } from "./components/Container";
 import { RecipeDetails } from "pages/RecipeDetails";
+import { UpdateRecipe } from "pages/UpdateRecipe";
 
 const theme = createMuiTheme({
   palette: {
@@ -41,6 +42,7 @@ function App() {
               <Switch>
                 <Route exact path="/" component={RecipeList} />
                 <Route path="/recipes/add" component={AddRecipe} />
+                <Route path="/recipes/:id/update" component={UpdateRecipe} />
                 <Route path="/recipes/:id" component={RecipeDetails} />
               </Switch>
             </Container>

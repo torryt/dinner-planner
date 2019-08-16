@@ -4,7 +4,7 @@ import { Form, Field, FieldArray, FormikProps } from "formik";
 import { TextField, TextFieldProps } from "formik-material-ui";
 import { Button, IconButton, Typography } from "@material-ui/core";
 
-import { TimeSlider } from "./TimeSlider";
+import { TimeSlider } from "../pages/AddRecipe/TimeSlider";
 import { Delete } from "@material-ui/icons";
 import { Recipe } from "types";
 
@@ -76,30 +76,6 @@ function RecipeForm(props: FormikProps<Recipe>) {
                   type="text"
                   component={TextField}
                 />
-                {/* <MeasurementUnitSelect
-                  value={ingredient.measurementUnit}
-                  onChange={props.handleChange(
-                    `ingredients.${index}.measurementUnit`
-                  )}
-                  onBlur={props.handleBlur(
-                    `ingredients.${index}.measurementUnit`
-                  )}
-                  inputProps={{
-                    name: `ingredients.${index}.measurementUnit`,
-                    id: `ingredients.${index}.measurementUnit`
-                  }}
-                >
-                  <MenuItem value="stk">Stk</MenuItem>
-                  <MenuItem value="dl">dl</MenuItem>
-                  <MenuItem value="l">liter</MenuItem>
-                  <MenuItem value="kg">Kilo</MenuItem>
-                  <MenuItem value="gram">Gram</MenuItem>
-                  <MenuItem value="ts">Teskjeer</MenuItem>
-                  <MenuItem value="ss">Spiseskjeer</MenuItem>
-                  <MenuItem value="pose">Pose</MenuItem>
-                  <MenuItem value="pakke">Pakke</MenuItem>
-                  <MenuItem value="klype">Klype</MenuItem>
-                </MeasurementUnitSelect> */}
                 <Field
                   name={`ingredients.${index}.name`}
                   label="Navn"
