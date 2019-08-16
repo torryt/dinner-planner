@@ -30,7 +30,7 @@ function RecipeDetails({ match }: RouteComponentProps<{ id: string }>) {
       </Typography>
       <ul>
         {recipe.ingredients.map(x => (
-          <IngredientItem ingredient={x} />
+          <IngredientItem ingredient={x} key={x.name} />
         ))}
       </ul>
     </>

@@ -8,6 +8,7 @@ import {
   StyledAddShoppingCart
 } from "./index";
 import { AdapterLink } from "components/Link";
+
 export function RecipeListItem(props: RecipeComponentProps) {
   return (
     <ListItem button component={AdapterLink} to={`/recipes/${props.recipe.id}`}>
