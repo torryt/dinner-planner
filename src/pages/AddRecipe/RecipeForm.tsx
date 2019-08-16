@@ -2,13 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Form, Field, FieldArray, FormikProps } from "formik";
 import { TextField, TextFieldProps } from "formik-material-ui";
-import {
-  Select,
-  MenuItem,
-  Button,
-  IconButton,
-  Typography
-} from "@material-ui/core";
+import { Button, IconButton, Typography } from "@material-ui/core";
 
 import { TimeSlider } from "./TimeSlider";
 import { Delete } from "@material-ui/icons";
@@ -28,9 +22,9 @@ const QuantityField = styled(Field)`
   margin-right: 1rem;
 `;
 
-const MeasurementUnitSelect = styled(Select)`
+const MeasurementUnitField = styled(Field)`
+  max-width: 80px;
   margin-right: 1rem;
-  min-width: 100px;
 `;
 
 const SubmitButton = styled(Button)``;
@@ -76,7 +70,13 @@ function RecipeForm(props: FormikProps<Recipe>) {
                   type="number"
                   component={TextField}
                 />
-                <MeasurementUnitSelect
+                <MeasurementUnitField
+                  name={`ingredients.${index}.measurementUnit`}
+                  label="Enhet"
+                  type="text"
+                  component={TextField}
+                />
+                {/* <MeasurementUnitSelect
                   value={ingredient.measurementUnit}
                   onChange={props.handleChange(
                     `ingredients.${index}.measurementUnit`
@@ -90,8 +90,8 @@ function RecipeForm(props: FormikProps<Recipe>) {
                   }}
                 >
                   <MenuItem value="stk">Stk</MenuItem>
-                  <MenuItem value="dl">Desiliter</MenuItem>
-                  <MenuItem value="l">Liter</MenuItem>
+                  <MenuItem value="dl">dl</MenuItem>
+                  <MenuItem value="l">liter</MenuItem>
                   <MenuItem value="kg">Kilo</MenuItem>
                   <MenuItem value="gram">Gram</MenuItem>
                   <MenuItem value="ts">Teskjeer</MenuItem>
@@ -99,7 +99,7 @@ function RecipeForm(props: FormikProps<Recipe>) {
                   <MenuItem value="pose">Pose</MenuItem>
                   <MenuItem value="pakke">Pakke</MenuItem>
                   <MenuItem value="klype">Klype</MenuItem>
-                </MeasurementUnitSelect>
+                </MeasurementUnitSelect> */}
                 <Field
                   name={`ingredients.${index}.name`}
                   label="Navn"
