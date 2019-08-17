@@ -26,9 +26,6 @@ function EditRecipe({
           if (!values.name) {
             errors.name = "Obligatorisk";
           }
-          if (!values.description) {
-            errors.name = "Obligatorisk";
-          }
           return errors;
         }}
         onSubmit={async (values, { setSubmitting }) => {

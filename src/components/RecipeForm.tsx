@@ -9,7 +9,7 @@ import { Delete } from "@material-ui/icons";
 import { Recipe } from "types";
 
 const StyledField = styled(Field)`
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 `;
 
 const IngredientRow = styled.div`
@@ -41,6 +41,18 @@ const FullWidthTextField = (props: TextFieldProps) => (
   <TextField {...props} fullWidth />
 );
 
+const StyledNumberOfPortionsField = styled(Field)`
+  margin-bottom: 2rem;
+`;
+const NumberOfPortionsField = () => (
+  <StyledNumberOfPortionsField
+    name="numberOfPortions"
+    label="Antall porsjoner"
+    type="number"
+    component={TextField}
+  />
+);
+
 function RecipeForm(props: FormikProps<Recipe>) {
   const values = props.values;
   return (
@@ -58,6 +70,7 @@ function RecipeForm(props: FormikProps<Recipe>) {
         value={props.values.minutesToCook}
         name="minutesToCook"
       />
+      <Field component={NumberOfPortionsField} />
       <FieldArray
         name="ingredients"
         render={arrayHelpers => (
@@ -72,7 +85,7 @@ function RecipeForm(props: FormikProps<Recipe>) {
                 />
                 <MeasurementUnitField
                   name={`ingredients.${index}.measurementUnit`}
-                  label="Enhet"
+                  label="Måleenhet"
                   type="text"
                   component={TextField}
                 />
@@ -119,7 +132,13 @@ function RecipeForm(props: FormikProps<Recipe>) {
           name="description"
           label="Beskrivelse"
           render={(props: TextFieldProps) => (
-            <TextField {...props} multiline fullWidth rows={8} />
+            <TextField
+              {...props}
+              multiline
+              fullWidth
+              variant="outlined"
+              rows={8}
+            />
           )}
         />
       </TextAreaWrapper>

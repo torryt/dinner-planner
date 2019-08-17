@@ -18,6 +18,10 @@ const Minutes = styled.span`
   color: #4e4e4e;
 `;
 
+const StyledSlider = styled(Slider)`
+  margin-bottom: 1rem;
+`;
+
 interface TimeSliderProps {
   onChange: (event: React.ChangeEvent<{}>, value: number | number[]) => void;
   onBlur: (event: React.FocusEvent<HTMLSpanElement>) => void;
@@ -34,7 +38,7 @@ function TimeSlider(props: TimeSliderProps) {
           <Minutes>{value}</Minutes> minutter
         </span>
       </Header>
-      <Slider
+      <StyledSlider
         onChange={onChange}
         onBlur={onBlur}
         value={value}

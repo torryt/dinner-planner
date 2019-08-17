@@ -19,6 +19,7 @@ function AddRecipe() {
               quantity: ""
             }
           ],
+          numberOfPortions: 4,
           minutesToCook: 25
         }}
         validate={(values: Recipe) => {

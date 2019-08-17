@@ -10,6 +10,7 @@ export interface Recipe {
   description: string;
   ingredients: Ingredient[];
   minutesToCook: number;
+  numberOfPortions: number;
 }
 
 export type WhereFilterOp = "<" | "<=" | "==" | ">=" | ">" | "array-contains";
