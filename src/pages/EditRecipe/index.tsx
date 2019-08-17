@@ -8,7 +8,7 @@ import { RouteComponentProps } from "react-router";
 import { useFetchDocument } from "hooks/useFetchDocument";
 import { PageProgress } from "components/PageProgress";
 
-function UpdateRecipe({
+function EditRecipe({
   match: {
     params: { id }
   }
@@ -41,4 +41,4 @@ function UpdateRecipe({
   );
 }
 
-export { UpdateRecipe };
+export { EditRecipe };

@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { List, Fab } from "@material-ui/core";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import { AvTimer, Add, AddShoppingCartOutlined } from "@material-ui/icons";
+import { Add } from "@material-ui/icons";
 
 import { Recipe } from "../../types";
 import { RecipeListItem } from "./RecipeListItem";
@@ -16,21 +16,6 @@ const StyledList = styled(List)`
   width: calc(100% + 2rem);
 `;
 
-export const ListSecondary = styled.span`
-  display: flex;
-  align-items: center;
-`;
-
-export const StyledAvTimer = styled(AvTimer)`
-  margin-right: 6px;
-  font-size: 1.4em;
-`;
-
-export const StyledAddShoppingCart = styled(AddShoppingCartOutlined)`
-  margin-right: 6px;
-  font-size: 1.4em;
-`;
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     fab: {
@@ -41,15 +26,6 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const RecipeInfo = styled.span`
-  margin-right: 16px;
-  display: flex;
-  align-items: center;
-`;
-
-export interface RecipeComponentProps {
-  recipe: Recipe;
-}
 function RecipeList() {
   const [recipes, isPending] = useFetchCollection<Recipe>("recipes");
 
