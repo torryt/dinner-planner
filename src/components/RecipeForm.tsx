@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { Form, Field, FieldArray, FormikProps, FieldProps } from "formik";
 import { Button, IconButton, Typography } from "@material-ui/core";
-import { TextFieldProps } from "@material-ui/core/TextField";
 
 import { TimeSlider } from "../pages/AddRecipe/TimeSlider";
 import { Delete } from "@material-ui/icons";

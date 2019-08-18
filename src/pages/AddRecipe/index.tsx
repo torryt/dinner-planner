@@ -39,21 +39,13 @@ function AddRecipe() {
           minutesToCook: 25
         }}
         validationSchema={validationSchema}
-        // validate={(values: Recipe) => {
-        //   let errors: any = {};
-        //   if (!values.name) {
-        //     errors.name = "Obligatorisk";
-        //   }
-        //   return errors;
-        // }}
         onSubmit={async (values, { setSubmitting }) => {
-          // const { success } = useFetchData(() => submitRecipe(values));
           try {
-            // const response = await submitRecipe(values);
+            const response = await submitRecipe(values);
             setSubmitting(false);
-            // setRecipeId(response.id);
-            // setSuccess(true);
-            setError(true);
+            setRecipeId(response.id);
+            setSuccess(true);
+            setError(false);
           } catch (err) {
             setError(true);
           }
