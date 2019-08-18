@@ -1,12 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import { Form, Field, FieldArray, FormikProps } from "formik";
-import { TextField, TextFieldProps } from "formik-material-ui";
+import { Form, Field, FieldArray, FormikProps, FieldProps } from "formik";
 import { Button, IconButton, Typography } from "@material-ui/core";
+import { TextFieldProps } from "@material-ui/core/TextField";
 
 import { TimeSlider } from "../pages/AddRecipe/TimeSlider";
 import { Delete } from "@material-ui/icons";
 import { Recipe } from "types";
+import { TextField } from "components/TextField";
 
 const StyledField = styled(Field)`
   margin-bottom: 2rem;
@@ -37,21 +38,19 @@ const TextAreaWrapper = styled.div`
   margin-bottom: 1rem;
 `;
 
-const FullWidthTextField = (props: TextFieldProps) => (
-  <TextField {...props} fullWidth />
-);
-
-const StyledNumberOfPortionsField = styled(Field)`
+const StyledNumberOfPortionsField = styled(TextField)`
   margin-bottom: 2rem;
 `;
-const NumberOfPortionsField = () => (
-  <StyledNumberOfPortionsField
-    name="numberOfPortions"
-    label="Antall porsjoner"
-    type="number"
-    component={TextField}
-  />
-);
+const NumberOfPortionsField = (props: { label: string; field: any }) => {
+  return (
+    <StyledNumberOfPortionsField
+      {...props.field}
+      name={props.field.name}
+      label={props.label}
+      type="number"
+    />
+  );
+};
 
 function RecipeForm(props: FormikProps<Recipe>) {
   const values = props.values;
@@ -61,7 +60,10 @@ function RecipeForm(props: FormikProps<Recipe>) {
         name="name"
         label="Navn på retten"
         type="text"
-        component={FullWidthTextField}
+        fullWidth
+        component={TextField}
+        touched={props.touched.name}
+        error={!!props.errors.name}
       />
 
       <TimeSlider
@@ -70,7 +72,12 @@ function RecipeForm(props: FormikProps<Recipe>) {
         value={props.values.minutesToCook}
         name="minutesToCook"
       />
-      <Field component={NumberOfPortionsField} />
+      <Field
+        name="numberOfPortions"
+        label="Antall porsjoner"
+        type="number"
+        component={NumberOfPortionsField}
+      />
       <FieldArray
         name="ingredients"
         render={arrayHelpers => (
@@ -131,8 +138,9 @@ function RecipeForm(props: FormikProps<Recipe>) {
         <Field
           name="description"
           label="Beskrivelse"
-          render={(props: TextFieldProps) => (
+          render={(props: FieldProps) => (
             <TextField
+              {...props.field}
               {...props}
               multiline
               fullWidth

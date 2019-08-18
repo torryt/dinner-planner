@@ -31,13 +31,13 @@ function useFetchData<T>(func: () => Promise<T>) {
     }
     fetchData();
   });
-  return [data, pending, delayedPending, error, success] as [
-    T[],
-    boolean,
-    boolean,
-    boolean,
-    boolean
-  ];
+  return {
+    data,
+    pending,
+    delayedPending,
+    error,
+    success
+  };
 }
 
 export { useFetchData };

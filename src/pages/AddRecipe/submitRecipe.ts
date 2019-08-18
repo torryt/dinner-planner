@@ -15,7 +15,7 @@ async function submitRecipe(recipe: Recipe) {
     ...recipe,
     recipeCollectionId: userRecipeCollectionId
   };
-  await db.collection("recipes").add(payload);
+  return await db.collection("recipes").add(payload);
 }
 
 export { submitRecipe };
