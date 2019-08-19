@@ -53,4 +53,5 @@ function RecipeList() {
   );
 }
 
+export { RecipeListBar } from "./RecipeListBar";
 export { RecipeList };

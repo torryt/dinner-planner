@@ -5,11 +5,11 @@ import { StylesProvider, ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { CssBaseline } from "@material-ui/core";
 
-import { RecipeList } from "./pages/RecipeList";
-import { AddRecipe } from "./pages/AddRecipe";
-import { AppBar } from "./components/AppBar";
+import { RecipeList, RecipeListBar } from "./pages/RecipeList";
+import { AddRecipe, AddRecipeBar } from "./pages/AddRecipe";
+import { AppBar } from "./AppBar";
 import { Container } from "./components/Container";
-import { RecipeDetails } from "pages/RecipeDetails";
+import { RecipeDetails, RecipeDetailsBar } from "pages/RecipeDetails";
 import { EditRecipe } from "pages/EditRecipe";
 
 const theme = createMuiTheme({
@@ -37,7 +37,13 @@ function App() {
         <StylesProvider injectFirst>
           <>
             <CssBaseline />
-            <AppBar />
+            <AppBar>
+              <Switch>
+                <Route path="/recipes/add" component={AddRecipeBar} />
+                <Route exact path="/recipes/:id" component={RecipeDetailsBar} />
+                <Route exact path="/" component={RecipeListBar} />
+              </Switch>
+            </AppBar>
             <Container maxWidth="sm">
               <Switch>
                 <Route exact path="/" component={RecipeList} />

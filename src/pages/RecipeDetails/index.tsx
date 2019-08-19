@@ -62,4 +62,5 @@ function RecipeDetails({ match }: RouteComponentProps<{ id: string }>) {
   );
 }
 
+export { RecipeDetailsBar } from "./RecipeDetailsBar";
 export { RecipeDetails };

@@ -56,4 +56,5 @@ function AddRecipe() {
   );
 }
 
+export { AddRecipeBar } from "./AddRecipeBar";
 export { AddRecipe };
