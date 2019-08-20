@@ -55,4 +55,5 @@ function EditRecipe({
   );
 }
 
+export { EditRecipeBar } from "./EditRecipeBar";
 export { EditRecipe };
