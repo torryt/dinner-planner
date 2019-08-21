@@ -50,7 +50,7 @@ function useFetchCollection<T>(
       fetchCollection();
     }
     return () => setIsCanceled(true);
-  }, [collection, filter]);
+  }, [collection, filter, isCanceled]);
   return [data, pending, error, success] as [T[], boolean, boolean, boolean];
 }
 

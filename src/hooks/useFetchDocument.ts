@@ -46,7 +46,7 @@ function useFetchDocument<T>(collection: string, document: string) {
       fetchDocument();
     }
     return () => setIsCanceled(true);
-  }, [collection, document]);
+  }, [collection, document, isCanceled]);
   const state = { pending, error, success };
   return [data, state] as [T | undefined, FetchState];
 }
