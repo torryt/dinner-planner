@@ -13,24 +13,24 @@ import { RecipeDetails, RecipeDetailsBar } from "pages/RecipeDetails";
 import { EditRecipe, EditRecipeBar } from "pages/EditRecipe";
 import { ErrorBoundary } from "components/ErrorBoundary";
 
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: "#424250"
-    },
-    secondary: {
-      main: "#0044ff"
-    }
-  },
-  overrides: {
-    MuiAppBar: {
-      colorPrimary: {
-        backgroundColor: "#424250"
-      }
-    }
-  }
-});
-
+// const theme = createMuiTheme({
+//   palette: {
+//     primary: {
+//       main: "#424250"
+//     },
+//     secondary: {
+//       main: "#0044ff"
+//     }
+//   },
+//   overrides: {
+//     MuiAppBar: {
+//       colorPrimary: {
+//         backgroundColor: "#424250"
+//       }
+//     }
+//   }
+// });
+const theme = createMuiTheme({});
 function App() {
   return (
     <Router>

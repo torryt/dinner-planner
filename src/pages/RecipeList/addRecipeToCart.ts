@@ -9,7 +9,7 @@ function addRecipeToCart(recipeId: string) {
 
   return async () => {
     const collection = db.collection("shoppingCarts");
-    debug("Fetching existing shopping cart...");
+    debug(`Fetching existing shopping cart`, { user: currentUser.uid });
     const userShoppingCart = await collection
       .where("users", "array-contains", currentUser.uid)
       .limit(1)
@@ -26,7 +26,7 @@ function addRecipeToCart(recipeId: string) {
       .collection("shoppingCarts")
       .doc(userShoppingCart.docs[0].id)
       .update({
-        recipes: firebase.firestore.FieldValue.arrayUnion("greater_virginia")
+        recipes: firebase.firestore.FieldValue.arrayUnion(recipeId)
       });
   };
 }
