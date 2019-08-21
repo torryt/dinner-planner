@@ -1,4 +1,4 @@
-import { firebase, ui, uiConfig } from "./firebase";
+import { firebase, ui, uiConfig } from "./firebaseSetup";
 
 import React from "react";
 import ReactDOM from "react-dom";

@@ -1,4 +1,4 @@
-import { firebase } from "../../firebase";
+import { firebase } from "../../firebaseSetup";
 import { Recipe } from "types";
 
 const db = firebase.firestore();

@@ -13,7 +13,7 @@ import { MoreVert, Delete, Edit } from "@material-ui/icons";
 import { ProfileMenu } from "components/ProfileMenu";
 import { BackLink, AdapterLink } from "components/Link";
 import { RouteComponentProps, Redirect } from "react-router";
-import { firebase } from "../../firebase";
+import { firebase } from "../../firebaseSetup";
 
 const ITEM_HEIGHT = 48;
 

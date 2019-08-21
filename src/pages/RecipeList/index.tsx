@@ -11,7 +11,7 @@ import { RecipeListItem } from "./RecipeListItem";
 import { AdapterLink } from "components/Link";
 import { PageProgress } from "components/PageProgress";
 import { useFetchCollection } from "hooks/useFetchCollection";
-import { firebase } from "../../firebase";
+import { firebase } from "../../firebaseSetup";
 import { useAsyncFn } from "react-use";
 import { ErrorPage } from "components/ErrorPage";
 import { Redirect } from "react-router";

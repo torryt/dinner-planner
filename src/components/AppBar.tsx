@@ -7,10 +7,10 @@ const StyledToolbar = styled(Toolbar)`
   justify-content: space-between;
 `;
 
-function AppBar({ children }: { children: React.ReactNode }) {
+function AppBar({ children, ...restProps }: { children?: React.ReactNode }) {
   return (
-    <MuiAppBar position="static">
-      <StyledToolbar>{children}</StyledToolbar>
+    <MuiAppBar position="static" {...restProps}>
+      <StyledToolbar>{children && children}</StyledToolbar>
     </MuiAppBar>
   );
 }

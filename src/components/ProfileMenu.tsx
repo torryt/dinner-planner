@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import { firebase } from "../firebase";
+import { firebase } from "../firebaseSetup";
 
 import {
   IconButton,

@@ -8,7 +8,7 @@ const Heading = styled(Typography)`
 function ErrorPage() {
   return (
     <>
-      <Heading variant="h3" component="h1">
+      <Heading variant="h4" component="h1">
         Noe gikk galt{" "}
         <span role="img" aria-label="trist ansikt">
           😥

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { WhereFilterOp } from "../types";
 
-import { firebase } from "../firebase";
+import { firebase } from "../firebaseSetup";
 
 const requestTimeBeforePending = 600;
 const db = firebase.firestore();

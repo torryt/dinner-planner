@@ -7,10 +7,11 @@ import { CssBaseline } from "@material-ui/core";
 
 import { RecipeList, RecipeListBar } from "./pages/RecipeList";
 import { AddRecipe, AddRecipeBar } from "./pages/AddRecipe";
-import { AppBar } from "./AppBar";
+import { AppBar } from "./components/AppBar";
 import { Container } from "./components/Container";
 import { RecipeDetails, RecipeDetailsBar } from "pages/RecipeDetails";
 import { EditRecipe, EditRecipeBar } from "pages/EditRecipe";
+import { ErrorBoundary } from "components/ErrorBoundary";
 
 const theme = createMuiTheme({
   palette: {
@@ -35,7 +36,7 @@ function App() {
     <Router>
       <ThemeProvider theme={theme}>
         <StylesProvider injectFirst>
-          <>
+          <ErrorBoundary>
             <CssBaseline />
             <AppBar>
               <Switch>
@@ -53,7 +54,7 @@ function App() {
                 <Route path="/recipes/:id" component={RecipeDetails} />
               </Switch>
             </Container>
-          </>
+          </ErrorBoundary>
         </StylesProvider>
       </ThemeProvider>
     </Router>
