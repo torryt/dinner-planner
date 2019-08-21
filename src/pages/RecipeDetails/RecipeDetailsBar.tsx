@@ -89,7 +89,7 @@ function RecipeDetailsBar({
           </MenuItem>
           <MenuItem onClick={deleteTrigger}>
             <ListItemIcon>
-              <Delete />
+              <Delete color="error" />
             </ListItemIcon>
             <Typography variant="inherit">Slett</Typography>
           </MenuItem>
