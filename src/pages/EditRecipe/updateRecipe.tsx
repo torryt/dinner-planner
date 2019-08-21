@@ -8,7 +8,7 @@ async function updateRecipe(recipe: Recipe, recipeId: string) {
     await db
       .collection("recipes")
       .doc(recipeId)
-      .set(recipe);
+      .update({ ...recipe });
   } catch (err) {
     console.error(`Could not update recipe with id ${recipeId}`);
     throw err;

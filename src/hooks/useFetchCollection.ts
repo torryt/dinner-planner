@@ -8,12 +8,13 @@ const db = firebase.firestore();
 
 function useFetchCollection<T>(
   collection: string,
-  filter?: { fieldPath: string; opStr: WhereFilterOp; value: string }
+  filter?: { fieldPath: string; opStr: WhereFilterOp; value: string | boolean }
 ) {
   const [pending, setPending] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
   const [data, setData] = useState([] as T[]);
+  const [isCanceled, setIsCanceled] = useState(false);
 
   useEffect(() => {
     async function fetchCollection() {
@@ -45,7 +46,10 @@ function useFetchCollection<T>(
         setPending(false);
       }
     }
-    fetchCollection();
+    if (!isCanceled) {
+      fetchCollection();
+    }
+    return () => setIsCanceled(true);
   }, [collection, filter]);
   return [data, pending, error, success] as [T[], boolean, boolean, boolean];
 }

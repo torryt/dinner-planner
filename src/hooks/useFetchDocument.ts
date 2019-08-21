@@ -4,11 +4,17 @@ import { firebase } from "../firebase";
 const requestTimeBeforePending = 600;
 const db = firebase.firestore();
 
+interface FetchState {
+  pending: boolean;
+  error: boolean;
+  success: boolean;
+}
 function useFetchDocument<T>(collection: string, document: string) {
   const [pending, setPending] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
   const [data, setData] = useState(undefined as T | undefined);
+  const [isCanceled, setIsCanceled] = useState(false);
 
   useEffect(() => {
     async function fetchDocument() {
@@ -36,14 +42,13 @@ function useFetchDocument<T>(collection: string, document: string) {
         setPending(false);
       }
     }
-    fetchDocument();
+    if (!isCanceled) {
+      fetchDocument();
+    }
+    return () => setIsCanceled(true);
   }, [collection, document]);
-  return [data, pending, error, success] as [
-    T | undefined,
-    boolean,
-    boolean,
-    boolean
-  ];
+  const state = { pending, error, success };
+  return [data, state] as [T | undefined, FetchState];
 }
 
 export { useFetchDocument };

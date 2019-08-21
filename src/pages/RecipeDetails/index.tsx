@@ -7,6 +7,7 @@ import { Typography, makeStyles, Theme, createStyles } from "@material-ui/core";
 import { Recipe, Ingredient } from "types";
 import { PageProgress } from "components/PageProgress";
 import { AvTimer } from "@material-ui/icons";
+import { ErrorPage } from "components/ErrorPage";
 
 interface IngredientItemProps {
   ingredient: Ingredient;
@@ -35,7 +36,13 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function RecipeDetails({ match }: RouteComponentProps<{ id: string }>) {
   const classes = useStyles();
-  const [recipe] = useFetchDocument<Recipe>("recipes", match.params.id);
+  const [recipe, fetchState] = useFetchDocument<Recipe>(
+    "recipes",
+    match.params.id
+  );
+  if (fetchState.error) {
+    return <ErrorPage />;
+  }
   if (!recipe) {
     return <PageProgress />;
   }
