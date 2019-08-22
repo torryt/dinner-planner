@@ -4,15 +4,16 @@ import { ProfileMenu } from "components/ProfileMenu";
 import { StyledHeading } from "components/Heading";
 import { IconButton } from "@material-ui/core";
 import { ShoppingCartOutlined } from "@material-ui/icons";
-import { AdapterLink } from "components/Link";
+import { AdapterLink, BackLink } from "components/Link";
 
 const RightWrapper = styled.div`
   display: flex;
 `;
-function RecipeListBar() {
+function ShoppingCartBar() {
   return (
     <>
-      <StyledHeading>Oppskrifter</StyledHeading>
+      <BackLink />
+      <StyledHeading>Handlelapp</StyledHeading>
       <RightWrapper>
         <ProfileMenu />
 
@@ -24,4 +25,4 @@ function RecipeListBar() {
   );
 }
 
-export { RecipeListBar };
+export { ShoppingCartBar };

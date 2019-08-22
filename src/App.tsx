@@ -5,12 +5,11 @@ import { StylesProvider, ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { CssBaseline } from "@material-ui/core";
 
-import { RecipeList, RecipeListBar } from "./pages/RecipeList";
-import { AddRecipe, AddRecipeBar } from "./pages/AddRecipe";
-import { AppBar } from "./components/AppBar";
-import { Container } from "./components/Container";
-import { RecipeDetails, RecipeDetailsBar } from "pages/RecipeDetails";
-import { EditRecipe, EditRecipeBar } from "pages/EditRecipe";
+import { RecipeList } from "./pages/RecipeList";
+import { AddRecipe } from "./pages/AddRecipe";
+import { RecipeDetails } from "pages/RecipeDetails";
+import { EditRecipe } from "pages/EditRecipe";
+import { ShoppingCart } from "pages/ShoppingCart";
 import { ErrorBoundary } from "components/ErrorBoundary";
 
 // const theme = createMuiTheme({
@@ -43,6 +42,7 @@ function App() {
               <Route path="/recipes/add" component={AddRecipe} />
               <Route path="/recipes/:id/edit" component={EditRecipe} />
               <Route path="/recipes/:id" component={RecipeDetails} />
+              <Route path="/shopping-cart" component={ShoppingCart} />
             </Switch>
           </ErrorBoundary>
         </StylesProvider>
