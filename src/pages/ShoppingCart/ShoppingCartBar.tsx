@@ -16,10 +16,6 @@ function ShoppingCartBar() {
       <StyledHeading>Handlelapp</StyledHeading>
       <RightWrapper>
         <ProfileMenu />
-
-        <IconButton to="/shopping-cart" component={AdapterLink} color="inherit">
-          <ShoppingCartOutlined />
-        </IconButton>
       </RightWrapper>
     </>
   );
