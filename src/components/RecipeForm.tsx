@@ -115,7 +115,7 @@ function RecipeForm(props: FormikProps<Recipe>) {
               <AddIngredientButton
                 aria-label="Legg til ingrediens"
                 variant="outlined"
-                color="secondary"
+                color="primary"
                 onClick={() =>
                   arrayHelpers.push({
                     name: "",

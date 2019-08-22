@@ -6,7 +6,7 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { Add } from "@material-ui/icons";
 import { parse } from "query-string";
 
-import { Recipe, WhereFilterOp } from "../../types";
+import { Recipe, WhereFilterOp, ShoppingCart } from "../../types";
 import { RecipeListItem } from "./RecipeListItem";
 import { AdapterLink } from "components/Link";
 import { PageProgress } from "components/PageProgress";
@@ -15,6 +15,7 @@ import { firebase } from "../../firebaseSetup";
 import { useAsyncFn } from "react-use";
 import { ErrorPage } from "components/ErrorPage";
 import { Redirect } from "react-router";
+import { User } from "firebase";
 
 const StyledList = styled(List)`
   margin-left: -1rem;
@@ -43,15 +44,29 @@ function undoDeleteRecipe(recipeId: string) {
 }
 
 function RecipeList() {
-  const filter = {
+  const currentUser = firebase.auth().currentUser as User;
+
+  const queryParams = parse(window.location.search);
+  const deletedRecipeId = queryParams.deletedRecipeId as string;
+  const recipeFilter = {
     fieldPath: "isDeleted",
     opStr: "==" as WhereFilterOp,
     value: false
   };
-  const queryParams = parse(window.location.search);
-  const deletedRecipeId = queryParams.deletedRecipeId as string;
+  const shoppingCartFilter = {
+    fieldPath: "users",
+    opStr: "array-contains" as WhereFilterOp,
+    value: currentUser.uid
+  };
 
-  const [recipes, isPending] = useFetchCollection<Recipe>("recipes", filter);
+  const [recipes, recipesIsPending] = useFetchCollection<Recipe>(
+    "recipes",
+    recipeFilter
+  );
+  const [shoppingCarts, shoppingCartsIsPending] = useFetchCollection<
+    ShoppingCart
+  >("shoppingCarts", shoppingCartFilter);
+
   const [deleteRecipeState, deleteTrigger] = useAsyncFn(
     undoDeleteRecipe(deletedRecipeId),
     [deletedRecipeId]
@@ -62,7 +77,7 @@ function RecipeList() {
   ));
   const classes = useStyles();
 
-  if (isPending) {
+  if (recipesIsPending || shoppingCartsIsPending) {
     return <PageProgress />;
   }
   if (deleteRecipeState.error) {

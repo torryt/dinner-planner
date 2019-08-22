@@ -13,4 +13,10 @@ export interface Recipe {
   numberOfPortions: number;
 }
 
+export interface ShoppingCart {
+  id: string;
+  users: string[];
+  recipes: string[];
+}
+
 export type WhereFilterOp = "<" | "<=" | "==" | ">=" | ">" | "array-contains";
