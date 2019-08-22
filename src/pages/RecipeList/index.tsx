@@ -18,6 +18,8 @@ import { Recipe, WhereFilterOp, ShoppingCart } from "../../types";
 import { firebase } from "../../firebaseSetup";
 
 import { RecipeListBar } from "./RecipeListBar";
+import debugModule from "debug";
+const debug = debugModule("dinner-planner:recipe-list");
 
 const StyledList = styled(List)`
   margin-left: -1rem;
@@ -61,33 +63,47 @@ function RecipeList() {
     value: currentUser.uid
   };
 
-  const [recipes, recipesIsPending] = useFetchCollection<Recipe>(
+  const [recipes, recipesState] = useFetchCollection<Recipe>(
     "recipes",
     recipeFilter
   );
-  const [shoppingCarts, shoppingCartsIsPending] = useFetchCollection<
-    ShoppingCart
-  >("shoppingCarts", shoppingCartFilter);
+  const [shoppingCarts, cartState] = useFetchCollection<ShoppingCart>(
+    "shoppingCarts",
+    shoppingCartFilter
+  );
 
   const [deleteRecipeState, deleteTrigger] = useAsyncFn(
     undoDeleteRecipe(deletedRecipeId),
     [deletedRecipeId]
   );
-
-  const recipeComponents = recipes.map(x => (
-    <RecipeListItem recipe={x} key={x.id} />
-  ));
   const classes = useStyles();
 
-  if (recipesIsPending || shoppingCartsIsPending) {
-    return <PageProgress />;
-  }
-  if (deleteRecipeState.error) {
+  if (deleteRecipeState.error || recipesState.error || cartState.error) {
     return <ErrorPage />;
+  }
+  if (
+    recipesState.pending ||
+    cartState.pending ||
+    !recipesState.success ||
+    !cartState.success
+  ) {
+    return <PageProgress />;
   }
   if (deleteRecipeState.value) {
     return <Redirect to={`/recipes/${deletedRecipeId}`} />;
   }
+  const shoppingCart = shoppingCarts[0];
+  debug("Shopping cart value", shoppingCart);
+  const mappedRecipes = recipes.map(x => ({
+    ...x,
+    isInShoppingCart: shoppingCart
+      ? shoppingCart.recipes.includes(x.id as string)
+      : false
+  }));
+
+  const recipeComponents = mappedRecipes.map(x => (
+    <RecipeListItem recipe={x} key={x.id} />
+  ));
   return (
     <PageWrapper renderAppBar={RecipeListBar}>
       {deletedRecipeId ? (

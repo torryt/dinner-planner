@@ -27,8 +27,37 @@ function addRecipeToCart(recipeId: string) {
       .doc(userShoppingCart.docs[0].id)
       .update({
         recipes: firebase.firestore.FieldValue.arrayUnion(recipeId)
+      })
+      .then(() => {
+        debug("Updated user shopping cart!");
+        return { success: true };
       });
   };
 }
 
-export { addRecipeToCart };
+function removeRecipeFromCart(recipeId: string) {
+  const db = firebase.firestore();
+  const currentUser = firebase.auth().currentUser as User;
+
+  return async () => {
+    const collection = db.collection("shoppingCarts");
+    debug(`Fetching existing shopping cart`, { user: currentUser.uid });
+    const userShoppingCart = await collection
+      .where("users", "array-contains", currentUser.uid)
+      .limit(1)
+      .get();
+    if (userShoppingCart.empty) {
+      throw Error("Found no shopping cart for user. Cannot remove recipe");
+    }
+    debug("Found 1 shopping cart. Removing recipe from shopping cart...");
+    return await db
+      .collection("shoppingCarts")
+      .doc(userShoppingCart.docs[0].id)
+      .update({
+        recipes: firebase.firestore.FieldValue.arrayRemove(recipeId)
+      })
+      .then(x => ({ success: true }));
+  };
+}
+
+export { addRecipeToCart, removeRecipeFromCart };

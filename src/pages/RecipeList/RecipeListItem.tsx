@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { useTransition, animated } from "react-spring";
 import {
   ListItem,
   ListItemText,
@@ -7,11 +8,13 @@ import {
   IconButton
 } from "@material-ui/core";
 import { AdapterLink } from "components/Link";
-import { AvTimer, AddShoppingCartOutlined } from "@material-ui/icons";
+import { AvTimer, AddShoppingCartOutlined, Done } from "@material-ui/icons";
 import { Recipe } from "types";
 import { useAsyncFn } from "react-use";
 
-import { addRecipeToCart } from "./addRecipeToCart";
+import { addRecipeToCart, removeRecipeFromCart } from "./recipeCartFunctions";
+import debugModule from "debug";
+const debug = debugModule("dinner-planner:recipe-list");
 
 const ListSecondary = styled.span`
   display: flex;
@@ -34,17 +37,81 @@ const RecipeInfo = styled.span`
   align-items: center;
 `;
 
-interface RecipeComponentProps {
-  recipe: Recipe;
-}
+const IsInCartBox = styled(IconButton)`
+  color: green;
+  background: #ececec;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
-export function RecipeListItem(props: RecipeComponentProps) {
+const ButtonWrapper = styled.div`
+  position: relative;
+  width: 48px;
+  height: 48px;
+`;
+
+function SecondaryButton(props: {
+  isInShoppingCart: boolean;
+  recipeId: string;
+}) {
+  const { isInShoppingCart, recipeId } = props;
+  debug("Secondary button props", props);
   const [addToCartState, addToCartTrigger] = useAsyncFn(
-    addRecipeToCart(props.recipe.id as string)
+    addRecipeToCart(recipeId as string)
   );
+  const [_, removeFromCartStateTrigger] = useAsyncFn(
+    removeRecipeFromCart(recipeId as string)
+  );
+  const [toggle, setIsInShoppingCart] = useState(isInShoppingCart);
+
+  const transitions = useTransition(toggle, null, {
+    from: { position: "absolute", opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 }
+  });
   if (addToCartState.error) {
     throw Error("Could not add recipe to shopping cart");
   }
+  return (
+    <ButtonWrapper>
+      {transitions.map(({ item, key, props }) =>
+        item ? (
+          <animated.div style={props} key={key}>
+            <IsInCartBox
+              edge="end"
+              aria-label="er i handlevogn"
+              onClick={() => {
+                removeFromCartStateTrigger();
+                setIsInShoppingCart(false);
+              }}
+            >
+              <Done />
+            </IsInCartBox>
+          </animated.div>
+        ) : (
+          <animated.div style={props} key={key}>
+            <IconButton
+              edge="end"
+              aria-label="legg til handlevogn"
+              onClick={() => {
+                addToCartTrigger();
+                setIsInShoppingCart(true);
+              }}
+            >
+              <AddShoppingCartOutlined />
+            </IconButton>
+          </animated.div>
+        )
+      )}
+    </ButtonWrapper>
+  );
+}
+
+interface RecipeComponentProps {
+  recipe: Recipe & { isInShoppingCart: boolean };
+}
+export function RecipeListItem(props: RecipeComponentProps) {
   return (
     <ListItem button component={AdapterLink} to={`/recipes/${props.recipe.id}`}>
       <ListItemText
@@ -62,13 +129,12 @@ export function RecipeListItem(props: RecipeComponentProps) {
         }
       />
       <ListItemSecondaryAction>
-        <IconButton
-          edge="end"
-          aria-label="legg til handlevogn"
-          onClick={addToCartTrigger}
-        >
-          <AddShoppingCartOutlined />
-        </IconButton>
+        <>
+          <SecondaryButton
+            recipeId={props.recipe.id as string}
+            isInShoppingCart={props.recipe.isInShoppingCart}
+          />
+        </>
       </ListItemSecondaryAction>
     </ListItem>
   );

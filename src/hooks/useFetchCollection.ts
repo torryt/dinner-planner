@@ -10,7 +10,7 @@ function useFetchCollection<T>(
   collection: string,
   filter?: { fieldPath: string; opStr: WhereFilterOp; value: string | boolean }
 ) {
-  const [pending, setPending] = useState(false);
+  const [pending, setPending] = useState(true);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
   const [data, setData] = useState([] as T[]);
@@ -51,7 +51,11 @@ function useFetchCollection<T>(
     }
     return () => setIsCanceled(true);
   }, [collection, filter, isCanceled]);
-  return [data, pending, error, success] as [T[], boolean, boolean, boolean];
+  const state = { pending, error, success };
+  return [data, state] as [
+    T[],
+    { pending: boolean; error: boolean; success: boolean }
+  ];
 }
 
 export { useFetchCollection };

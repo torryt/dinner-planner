@@ -38,7 +38,7 @@ function AddRecipe() {
             }
           ],
           numberOfPortions: 4,
-          minutesToCook: 25
+          minutesToCook: 30
         }}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting }) => {
