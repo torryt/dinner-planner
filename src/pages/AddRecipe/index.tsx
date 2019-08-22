@@ -7,6 +7,8 @@ import { RecipeForm } from "../../components/RecipeForm";
 import { submitRecipe } from "./submitRecipe";
 import { Redirect } from "react-router";
 import { ErrorPage } from "components/ErrorPage";
+import { PageWrapper } from "components/PageWrapper";
+import { AddRecipeBar } from "./AddRecipeBar";
 
 let validationSchema = yup.object().shape({
   name: yup.string().required()
@@ -50,7 +52,11 @@ function AddRecipe() {
             setError(true);
           }
         }}
-        render={(props: FormikProps<Recipe>) => <RecipeForm {...props} />}
+        render={(props: FormikProps<Recipe>) => (
+          <PageWrapper renderAppBar={AddRecipeBar}>
+            {(wrapperProps: any) => <RecipeForm {...props} {...wrapperProps} />}
+          </PageWrapper>
+        )}
       />
     </>
   );

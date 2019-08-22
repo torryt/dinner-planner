@@ -8,6 +8,8 @@ import { RouteComponentProps, Redirect } from "react-router";
 import { useFetchDocument } from "hooks/useFetchDocument";
 import { PageProgress } from "components/PageProgress";
 import { ErrorPage } from "components/ErrorPage";
+import { PageWrapper } from "components/PageWrapper";
+import { EditRecipeBar } from "./EditRecipeBar";
 
 function EditRecipe({
   match: {
@@ -49,7 +51,11 @@ function EditRecipe({
           await updateRecipe(values, id);
           setSubmitting(false);
         }}
-        render={(props: FormikProps<Recipe>) => <RecipeForm {...props} />}
+        render={(props: FormikProps<Recipe>) => (
+          <PageWrapper renderAppBar={() => <EditRecipeBar recipeId={id} />}>
+            {() => <RecipeForm {...props} />}
+          </PageWrapper>
+        )}
       />
     </>
   );

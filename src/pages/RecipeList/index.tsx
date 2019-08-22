@@ -1,21 +1,23 @@
 import React from "react";
 import styled from "styled-components";
-
 import { List, Fab, Button, CircularProgress } from "@material-ui/core";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { Add } from "@material-ui/icons";
 import { parse } from "query-string";
-
-import { Recipe, WhereFilterOp, ShoppingCart } from "../../types";
-import { RecipeListItem } from "./RecipeListItem";
-import { AdapterLink } from "components/Link";
-import { PageProgress } from "components/PageProgress";
-import { useFetchCollection } from "hooks/useFetchCollection";
-import { firebase } from "../../firebaseSetup";
 import { useAsyncFn } from "react-use";
-import { ErrorPage } from "components/ErrorPage";
 import { Redirect } from "react-router";
 import { User } from "firebase";
+
+import { AdapterLink } from "components/Link";
+import { PageProgress } from "components/PageProgress";
+import { PageWrapper } from "components/PageWrapper";
+import { ErrorPage } from "components/ErrorPage";
+import { useFetchCollection } from "hooks/useFetchCollection";
+import { RecipeListItem } from "./RecipeListItem";
+import { Recipe, WhereFilterOp, ShoppingCart } from "../../types";
+import { firebase } from "../../firebaseSetup";
+
+import { RecipeListBar } from "./RecipeListBar";
 
 const StyledList = styled(List)`
   margin-left: -1rem;
@@ -87,7 +89,7 @@ function RecipeList() {
     return <Redirect to={`/recipes/${deletedRecipeId}`} />;
   }
   return (
-    <>
+    <PageWrapper renderAppBar={RecipeListBar}>
       {deletedRecipeId ? (
         <div>
           Oppskriften er slettet.{" "}
@@ -110,7 +112,7 @@ function RecipeList() {
       >
         <Add />
       </Fab>
-    </>
+    </PageWrapper>
   );
 }
 

@@ -33,13 +33,11 @@ function deleteRecipe(recipeId: string) {
   };
 }
 
-function RecipeDetailsBar({
-  match: {
-    params: { id }
-  }
-}: RouteComponentProps<{ id: string }>) {
+function RecipeDetailsBar({ recipeId }: { recipeId: string }) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [deleteState, deleteTrigger] = useAsyncFn(deleteRecipe(id), [id]);
+  const [deleteState, deleteTrigger] = useAsyncFn(deleteRecipe(recipeId), [
+    recipeId
+  ]);
   const open = Boolean(anchorEl);
 
   function handleClick(event: React.MouseEvent<HTMLElement>) {
@@ -51,7 +49,9 @@ function RecipeDetailsBar({
   }
   if (deleteState.value) {
     return (
-      <Redirect to={{ pathname: "/", search: `?deletedRecipeId=${id}` }} />
+      <Redirect
+        to={{ pathname: "/", search: `?deletedRecipeId=${recipeId}` }}
+      />
     );
   }
   return (
@@ -81,7 +81,7 @@ function RecipeDetailsBar({
             }
           }}
         >
-          <MenuItem to={`/recipes/${id}/edit`} component={AdapterLink}>
+          <MenuItem to={`/recipes/${recipeId}/edit`} component={AdapterLink}>
             <ListItemIcon>
               <Edit />
             </ListItemIcon>

@@ -8,6 +8,8 @@ import { Recipe, Ingredient } from "types";
 import { PageProgress } from "components/PageProgress";
 import { AvTimer } from "@material-ui/icons";
 import { ErrorPage } from "components/ErrorPage";
+import { PageWrapper } from "components/PageWrapper";
+import { RecipeDetailsBar } from "./RecipeDetailsBar";
 
 interface IngredientItemProps {
   ingredient: Ingredient;
@@ -47,7 +49,9 @@ function RecipeDetails({ match }: RouteComponentProps<{ id: string }>) {
     return <PageProgress />;
   }
   return (
-    <>
+    <PageWrapper
+      renderAppBar={() => <RecipeDetailsBar recipeId={match.params.id} />}
+    >
       <Typography variant="h6" component="h1">
         {recipe.name}
       </Typography>
@@ -65,7 +69,7 @@ function RecipeDetails({ match }: RouteComponentProps<{ id: string }>) {
         ))}
       </ul>
       <p>{recipe.description}</p>
-    </>
+    </PageWrapper>
   );
 }
 

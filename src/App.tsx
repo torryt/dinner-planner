@@ -38,22 +38,12 @@ function App() {
         <StylesProvider injectFirst>
           <ErrorBoundary>
             <CssBaseline />
-            <AppBar>
-              <Switch>
-                <Route exact path="/" component={RecipeListBar} />
-                <Route path="/recipes/add" component={AddRecipeBar} />
-                <Route path="/recipes/:id/edit" component={EditRecipeBar} />
-                <Route path="/recipes/:id" component={RecipeDetailsBar} />
-              </Switch>
-            </AppBar>
-            <Container maxWidth="sm">
-              <Switch>
-                <Route exact path="/" component={RecipeList} />
-                <Route path="/recipes/add" component={AddRecipe} />
-                <Route path="/recipes/:id/edit" component={EditRecipe} />
-                <Route path="/recipes/:id" component={RecipeDetails} />
-              </Switch>
-            </Container>
+            <Switch>
+              <Route exact path="/" component={RecipeList} />
+              <Route path="/recipes/add" component={AddRecipe} />
+              <Route path="/recipes/:id/edit" component={EditRecipe} />
+              <Route path="/recipes/:id" component={RecipeDetails} />
+            </Switch>
           </ErrorBoundary>
         </StylesProvider>
       </ThemeProvider>
