@@ -60,9 +60,10 @@ function SecondaryButton(props: {
   const [addToCartState, addToCartTrigger] = useAsyncFn(
     addRecipeToCart(recipeId as string)
   );
-  const [_, removeFromCartStateTrigger] = useAsyncFn(
+  const removeFromCartHook = useAsyncFn(
     removeRecipeFromCart(recipeId as string)
   );
+  const removeFromCartStateTrigger = removeFromCartHook[1];
   const [toggle, setIsInShoppingCart] = useState(isInShoppingCart);
 
   const transitions = useTransition(toggle, null, {

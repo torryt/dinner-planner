@@ -9,6 +9,7 @@ const StyledToolbar = styled(Toolbar)`
 
 const StyledAppBar = styled(MuiAppBar)`
   margin-bottom: 1rem;
+  box-shadow: none;
 `;
 
 function AppBar({ children, ...restProps }: { children?: React.ReactNode }) {

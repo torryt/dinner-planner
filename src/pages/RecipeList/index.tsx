@@ -16,9 +16,10 @@ import { useFetchCollection } from "hooks/useFetchCollection";
 import { RecipeListItem } from "./RecipeListItem";
 import { Recipe, WhereFilterOp, ShoppingCart } from "../../types";
 import { firebase } from "../../firebaseSetup";
-
 import { RecipeListBar } from "./RecipeListBar";
+
 import debugModule from "debug";
+import { useShoppingCart } from "services/shoppingCarts/useShoppingCart";
 const debug = debugModule("dinner-planner:recipe-list");
 
 const StyledList = styled(List)`
@@ -57,20 +58,13 @@ function RecipeList() {
     opStr: "==" as WhereFilterOp,
     value: false
   };
-  const shoppingCartFilter = {
-    fieldPath: "users",
-    opStr: "array-contains" as WhereFilterOp,
-    value: currentUser.uid
-  };
 
   const [recipes, recipesState] = useFetchCollection<Recipe>(
     "recipes",
     recipeFilter
   );
-  const [shoppingCarts, cartState] = useFetchCollection<ShoppingCart>(
-    "shoppingCarts",
-    shoppingCartFilter
-  );
+
+  const cartState = useShoppingCart(currentUser.uid);
 
   const [deleteRecipeState, deleteTrigger] = useAsyncFn(
     undoDeleteRecipe(deletedRecipeId),
@@ -83,17 +77,23 @@ function RecipeList() {
   }
   if (
     recipesState.pending ||
-    cartState.pending ||
+    cartState.loading ||
     !recipesState.success ||
-    !cartState.success
+    !cartState.value
   ) {
     return <PageProgress />;
   }
   if (deleteRecipeState.value) {
     return <Redirect to={`/recipes/${deletedRecipeId}`} />;
   }
-  const shoppingCart = shoppingCarts[0];
-  debug("Shopping cart value", shoppingCart);
+  const shoppingCart = cartState.value;
+  const shoppingCartIngredientsCount = shoppingCart.recipes.reduce(
+    (_acc, currRecipeId) => {
+      const recipe = recipes.find(x => x.id === currRecipeId);
+      return recipe ? recipe.ingredients.length : 0;
+    },
+    0
+  );
   const mappedRecipes = recipes.map(x => ({
     ...x,
     isInShoppingCart: shoppingCart
@@ -105,7 +105,7 @@ function RecipeList() {
     <RecipeListItem recipe={x} key={x.id} />
   ));
   return (
-    <PageWrapper renderAppBar={RecipeListBar}>
+    <PageWrapper renderAppBar={() => <RecipeListBar />}>
       {deletedRecipeId ? (
         <div>
           Oppskriften er slettet.{" "}

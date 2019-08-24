@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-
+import { Provider } from "react-redux";
+import { createStore } from "redux";
 import { StylesProvider, ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { CssBaseline } from "@material-ui/core";
@@ -11,6 +12,9 @@ import { RecipeDetails } from "pages/RecipeDetails";
 import { EditRecipe } from "pages/EditRecipe";
 import { ShoppingCart } from "pages/ShoppingCart";
 import { ErrorBoundary } from "components/ErrorBoundary";
+import rootReducer from "state/reducer";
+
+const store = createStore(rootReducer);
 
 // const theme = createMuiTheme({
 //   palette: {
@@ -35,16 +39,18 @@ function App() {
     <Router>
       <ThemeProvider theme={theme}>
         <StylesProvider injectFirst>
-          <ErrorBoundary>
-            <CssBaseline />
-            <Switch>
-              <Route exact path="/" component={RecipeList} />
-              <Route path="/recipes/add" component={AddRecipe} />
-              <Route path="/recipes/:id/edit" component={EditRecipe} />
-              <Route path="/recipes/:id" component={RecipeDetails} />
-              <Route path="/shopping-cart" component={ShoppingCart} />
-            </Switch>
-          </ErrorBoundary>
+          <Provider store={store}>
+            <ErrorBoundary>
+              <CssBaseline />
+              <Switch>
+                <Route exact path="/" component={RecipeList} />
+                <Route path="/recipes/add" component={AddRecipe} />
+                <Route path="/recipes/:id/edit" component={EditRecipe} />
+                <Route path="/recipes/:id" component={RecipeDetails} />
+                <Route path="/shopping-cart" component={ShoppingCart} />
+              </Switch>
+            </ErrorBoundary>
+          </Provider>
         </StylesProvider>
       </ThemeProvider>
     </Router>
