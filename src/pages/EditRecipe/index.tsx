@@ -3,19 +3,24 @@ import { Formik, FormikProps } from "formik";
 import { Recipe } from "types";
 
 import { RecipeForm } from "components/RecipeForm";
-import { updateRecipe } from "./updateRecipe";
 import { RouteComponentProps, Redirect } from "react-router";
 import { useFetchDocument } from "hooks/useFetchDocument";
 import { PageProgress } from "components/PageProgress";
 import { ErrorPage } from "components/ErrorPage";
 import { PageWrapper } from "components/PageWrapper";
 import { EditRecipeBar } from "./EditRecipeBar";
+import { Dispatch } from "redux";
+import { connect } from "react-redux";
 
-function EditRecipe({
+interface EditRecipeProps extends RouteComponentProps<{ id: string }> {
+  updateRecipe: (recipe: Recipe, recipeId: string) => void;
+}
+function EditRecipeComponent({
   match: {
     params: { id }
-  }
-}: RouteComponentProps<{ id: string }>) {
+  },
+  updateRecipe
+}: EditRecipeProps) {
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [recipe] = useFetchDocument<Recipe>("recipes", id);
@@ -61,5 +66,11 @@ function EditRecipe({
   );
 }
 
-export { EditRecipeBar } from "./EditRecipeBar";
+const mapDispatchToProps = (dispatch: Dispatch) => ({});
+
+const EditRecipe = connect(
+  undefined,
+  mapDispatchToProps
+)(EditRecipeComponent);
+
 export { EditRecipe };

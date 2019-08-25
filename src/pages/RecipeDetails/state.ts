@@ -5,7 +5,7 @@ import { getRecipes } from "state/entities/recipes/actions";
 function mapStateToProps(state: AppState) {
   return {
     recipesById: state.recipes.byId,
-    error: state.recipes.error
+    error: state.recipes.fetchStatus.error
   };
 }
 

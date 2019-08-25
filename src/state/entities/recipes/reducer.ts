@@ -1,39 +1,24 @@
 import { keyBy } from "lodash";
 import { RecipeActionTypes, RecipeState } from "./types";
+import { combineReducers } from "redux";
+import { Recipe } from "types";
 
-const initialState: RecipeState = {
-  loading: false,
-  error: false,
-  errorMessage: "",
-  byId: {},
-  allIds: []
-};
-
-function recipes(
-  state: RecipeState = initialState,
+function recipesById(
+  state: { [id: string]: Recipe } = {},
   action: RecipeActionTypes
-): RecipeState {
+) {
   switch (action.type) {
-    case "FETCH_RECIPES_START":
-      return {
-        ...state,
-        loading: true,
-        error: false
-      };
     case "FETCH_RECIPES_SUCCESS":
+      return keyBy(action.payload.recipes, "id");
+    case "UPDATE_RECIPE":
       return {
         ...state,
-        loading: false,
-        error: false,
-        byId: keyBy(action.payload.recipes, "id"),
-        allIds: action.payload.recipes.map(x => x.id)
+        [action.payload.recipeId]: action.payload.recipe
       };
-    case "FETCH_RECIPES_ERROR": {
+    case "UPDATE_RECIPE_ERROR": {
       return {
         ...state,
-        loading: false,
-        error: true,
-        errorMessage: action.payload.message
+        [action.payload.recipeId]: action.payload.oldRecipe
       };
     }
     default:
@@ -41,4 +26,73 @@ function recipes(
   }
 }
 
-export { recipes };
+function allRecipeIds(state: string[] = [], action: RecipeActionTypes) {
+  switch (action.type) {
+    case "FETCH_RECIPES_SUCCESS":
+      return action.payload.recipes.map(x => x.id);
+    default:
+      return state;
+  }
+}
+
+function fetchStatus(
+  state: { loading: boolean; error?: string } = {
+    loading: false,
+    error: undefined
+  },
+  action: RecipeActionTypes
+) {
+  switch (action.type) {
+    case "FETCH_RECIPES_START":
+      return {
+        loading: true,
+        error: undefined
+      };
+    case "FETCH_RECIPES_SUCCESS":
+      return {
+        loading: false,
+        error: undefined
+      };
+    case "FETCH_RECIPES_ERROR": {
+      return {
+        loading: false,
+        error: "Could not fetch recipes"
+      };
+    }
+    default:
+      return state;
+  }
+}
+
+function updateError(
+  state: { error: boolean; message?: string } = {
+    error: false,
+    message: undefined
+  },
+  action: RecipeActionTypes
+) {
+  switch (action.type) {
+    case "UPDATE_RECIPE":
+      return {
+        error: false,
+        message: undefined
+      };
+    case "UPDATE_RECIPE_ERROR": {
+      return {
+        error: true,
+        message: undefined
+      };
+    }
+    default:
+      return state;
+  }
+}
+
+const recipesReducer = combineReducers<RecipeState>({
+  byId: recipesById,
+  allIds: allRecipeIds,
+  fetchStatus,
+  updateError
+});
+
+export { recipesReducer };

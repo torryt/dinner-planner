@@ -1,15 +1,21 @@
 import { ThunkAction } from "redux-thunk";
 import { AppState } from "state/store";
-import { Action } from "redux";
+import { Action, Dispatch } from "redux";
 import { User } from "firebase";
 
 import {
   FETCH_RECIPES_START,
   FETCH_RECIPES_ERROR,
-  FETCH_RECIPES_SUCCESS
+  FETCH_RECIPES_SUCCESS,
+  UPDATE_RECIPE_ERROR,
+  UPDATE_RECIPE
 } from "./types";
 import { firebase } from "firebaseSetup";
-import { fetchRecipes } from "services/recipes";
+import {
+  fetchRecipes,
+  updateRecipe as updateRecipeAsync
+} from "services/recipes";
+import { Recipe } from "types";
 
 function getRecipes(): ThunkAction<void, AppState, null, Action<string>> {
   return async dispatch => {
@@ -33,4 +39,20 @@ function getRecipes(): ThunkAction<void, AppState, null, Action<string>> {
   };
 }
 
-export { getRecipes };
+function updateRecipe(dispatch: Dispatch) {
+  return async (recipe: Recipe, recipeId: string) => {
+    dispatch({
+      type: UPDATE_RECIPE,
+      payload: { recipe, recipeId }
+    });
+    try {
+      await updateRecipeAsync(recipe, recipeId);
+    } catch (error) {
+      dispatch({
+        type: UPDATE_RECIPE_ERROR,
+        payload: { recipeId, errorMessage: error, oldRecipe: recipe }
+      });
+    }
+  };
+}
+export { getRecipes, updateRecipe };

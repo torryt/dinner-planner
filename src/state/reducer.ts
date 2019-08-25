@@ -1,9 +1,10 @@
 import { combineReducers } from "redux";
-import { recipes } from "./entities/recipes/reducer";
+import { recipesReducer } from "./entities/recipes/reducer";
 import { shoppingCart } from "./entities/shoppingCart/reducer";
+import { AppState } from "./store";
 
-const rootReducer = combineReducers({
-  recipes,
+const rootReducer = combineReducers<AppState>({
+  recipes: recipesReducer,
   shoppingCart
 });
 

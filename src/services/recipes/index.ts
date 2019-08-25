@@ -64,4 +64,18 @@ function removeRecipeFromCart(recipeId: string) {
       .then(x => ({ success: true }));
   };
 }
-export { fetchRecipes, addRecipeToCart, removeRecipeFromCart };
+
+async function updateRecipe(recipe: Recipe, recipeId: string) {
+  const db = firebase.firestore();
+  try {
+    await db
+      .collection("recipes")
+      .doc(recipeId)
+      .update({ ...recipe });
+  } catch (err) {
+    console.error(`Could not update recipe with id ${recipeId}`);
+    throw err;
+  }
+}
+
+export { fetchRecipes, addRecipeToCart, removeRecipeFromCart, updateRecipe };

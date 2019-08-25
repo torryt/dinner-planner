@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { List, Fab, Button, CircularProgress } from "@material-ui/core";
@@ -11,11 +11,9 @@ import { Redirect } from "react-router";
 import { AdapterLink } from "components/Link";
 import { PageProgress } from "components/PageProgress";
 import { PageWrapper } from "components/PageWrapper";
-import { ErrorPage } from "components/ErrorPage";
 import { RecipeListItem } from "./RecipeListItem";
-import { firebase } from "../../firebaseSetup";
+import { firebase } from "firebaseSetup";
 import { RecipeListBar } from "./RecipeListBar";
-
 import { mapStateToProps, mapDispatchToProps } from "./state";
 import { Recipe } from "types";
 

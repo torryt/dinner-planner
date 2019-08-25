@@ -16,7 +16,7 @@ function mapRecipeListRecipes(state: AppState) {
 
 function isRecipeListLoading(state: AppState) {
   return (
-    (state.recipes.loading || state.shoppingCart.loading) &&
+    (state.recipes.fetchStatus.loading || state.shoppingCart.loading) &&
     (!state.shoppingCart.value && state.recipes.allIds.length === 0)
   );
 }
@@ -24,7 +24,7 @@ function isRecipeListLoading(state: AppState) {
 function mapStateToProps(state: AppState) {
   return {
     loading: isRecipeListLoading(state),
-    error: state.recipes.error || state.shoppingCart.error,
+    error: !!state.recipes.fetchStatus.error || state.shoppingCart.error,
     recipes: mapRecipeListRecipes(state),
     ingredientsInCart: undefined
   };

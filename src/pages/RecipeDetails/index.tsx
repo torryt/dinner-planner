@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface RecipeDetailProps extends RouteComponentProps<{ id: string }> {
   recipesById: { [id: string]: Recipe };
   loading: boolean;
-  error: boolean;
+  error?: string;
   loadRecipes: () => void;
 }
 function RecipeDetailsComponent({
