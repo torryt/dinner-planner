@@ -1,6 +1,5 @@
 import React from "react";
 import { RouteComponentProps } from "react-router";
-import { useFetchDocument } from "hooks/useFetchDocument";
 
 import { Typography, makeStyles, Theme, createStyles } from "@material-ui/core";
 
@@ -10,6 +9,9 @@ import { AvTimer } from "@material-ui/icons";
 import { ErrorPage } from "components/ErrorPage";
 import { PageWrapper } from "components/PageWrapper";
 import { RecipeDetailsBar } from "./RecipeDetailsBar";
+import { useEffectOnce } from "react-use";
+import { connect } from "react-redux";
+import { mapStateToProps, mapDispatchToProps } from "./state";
 
 interface IngredientItemProps {
   ingredient: Ingredient;
@@ -36,13 +38,28 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-function RecipeDetails({ match }: RouteComponentProps<{ id: string }>) {
+interface RecipeDetailProps extends RouteComponentProps<{ id: string }> {
+  recipesById: { [id: string]: Recipe };
+  loading: boolean;
+  error: boolean;
+  loadRecipes: () => void;
+}
+function RecipeDetailsComponent({
+  match,
+  recipesById,
+  error,
+  loadRecipes
+}: RecipeDetailProps) {
   const classes = useStyles();
-  const [recipe, fetchState] = useFetchDocument<Recipe>(
-    "recipes",
-    match.params.id
-  );
-  if (fetchState.error) {
+  const recipe = recipesById[match.params.id];
+  useEffectOnce(() => {
+    loadRecipes();
+  });
+  // const [recipe, fetchState] = useFetchDocument<Recipe>(
+  //   "recipes",
+  //   props.match.params.id
+  // );
+  if (error) {
     return <ErrorPage />;
   }
   if (!recipe) {
@@ -73,5 +90,9 @@ function RecipeDetails({ match }: RouteComponentProps<{ id: string }>) {
   );
 }
 
-export { RecipeDetailsBar } from "./RecipeDetailsBar";
+const RecipeDetails = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RecipeDetailsComponent);
+
 export { RecipeDetails };

@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
-import { createStore } from "redux";
 import { StylesProvider, ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { CssBaseline } from "@material-ui/core";

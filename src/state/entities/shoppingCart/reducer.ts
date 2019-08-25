@@ -15,8 +15,7 @@ function shoppingCart(
       return {
         ...state,
         loading: true,
-        error: false,
-        value: undefined
+        error: false
       };
     case "FETCH_SHOPPING_CART_SUCCESS":
       return {

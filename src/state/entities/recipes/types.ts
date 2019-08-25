@@ -38,10 +38,11 @@ export type RecipeActionTypes =
   | FetchRecipesSuccessAction
   | FetchRecipesErrorAction;
 
+export type RecipeDict = { [id: string]: Recipe };
 export interface RecipeState {
   loading: boolean;
   error: boolean;
   errorMessage: string;
-  byId: { [id: string]: Recipe };
+  byId: RecipeDict;
   allIds: string[];
 }

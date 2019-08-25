@@ -8,8 +8,8 @@ import {
   FETCH_RECIPES_ERROR,
   FETCH_RECIPES_SUCCESS
 } from "./types";
-import { firebase } from "../../../firebaseSetup";
-import { fetchRecipes } from "../../../services/recipes";
+import { firebase } from "firebaseSetup";
+import { fetchRecipes } from "services/recipes";
 
 function getRecipes(): ThunkAction<void, AppState, null, Action<string>> {
   return async dispatch => {

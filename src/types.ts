@@ -1,3 +1,13 @@
+type MeasurementUnit =
+  | "stk"
+  | "ml"
+  | "dl"
+  | "l"
+  | "pose"
+  | "pk"
+  | "glass"
+  | "g"
+  | "kg";
 export interface Ingredient {
   name: string;
   measurementUnit: string;
@@ -13,10 +23,19 @@ export interface Recipe {
   numberOfPortions: number;
 }
 
+export interface ShoppingCartItem {
+  id: string;
+  shoppingCartId: string;
+  ingredientId: string;
+  recipeId?: string;
+  quantity: number;
+  measurementUnit: MeasurementUnit;
+}
+
 export interface ShoppingCart {
   id: string;
   users: string[];
-  recipes: string[];
+  item: string[];
 }
 
 export type WhereFilterOp = "<" | "<=" | "==" | ">=" | ">" | "array-contains";

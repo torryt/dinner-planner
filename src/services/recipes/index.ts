@@ -2,7 +2,7 @@ import { firebase } from "../../firebaseSetup";
 import { Recipe } from "types";
 import { User } from "firebase";
 import debugModule from "debug";
-import { getOrCreateUserShoppingCart } from "services/shoppingCarts/shoppingCarts";
+import { getOrCreateUserShoppingCart } from "services/shoppingCarts";
 
 const debug = debugModule("dinner-planner:recipes-service");
 

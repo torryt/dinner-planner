@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import styled from "styled-components";
 import { List, Fab, Button, CircularProgress } from "@material-ui/core";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { Add } from "@material-ui/icons";
 import { parse } from "query-string";
-import { useAsyncFn } from "react-use";
+import { useAsyncFn, useEffectOnce } from "react-use";
 import { Redirect } from "react-router";
-import { User } from "firebase";
 
 import { AdapterLink } from "components/Link";
 import { PageProgress } from "components/PageProgress";
@@ -15,10 +15,9 @@ import { ErrorPage } from "components/ErrorPage";
 import { RecipeListItem } from "./RecipeListItem";
 import { firebase } from "../../firebaseSetup";
 import { RecipeListBar } from "./RecipeListBar";
-import { useFetchListData } from "./useFetchListData";
 
-import debugModule from "debug";
-import { useShoppingCart } from "services/shoppingCarts/useShoppingCart";
+import { mapStateToProps, mapDispatchToProps } from "./state";
+import { Recipe } from "types";
 
 const StyledList = styled(List)`
   margin-left: -1rem;
@@ -46,45 +45,40 @@ function undoDeleteRecipe(recipeId: string) {
   };
 }
 
-function RecipeList() {
-  const currentUser = firebase.auth().currentUser as User;
-
+interface RecipeListProps {
+  loading: boolean;
+  error: boolean;
+  recipes: (Recipe & { isInShoppingCart: boolean })[];
+  ingredientsInCart?: number;
+  fetchInitialData: () => void;
+  addRecipeToShoppingCart: () => void;
+  removeRecipeFromShoppingCart: () => void;
+}
+function RecipeListComponent(props: RecipeListProps) {
   const queryParams = parse(window.location.search);
   const deletedRecipeId = queryParams.deletedRecipeId as string;
 
-  const data = useFetchListData();
-  // const [recipes, recipesState] = useFetchCollection<Recipe>(
-  //   "recipes",
-  //   recipeFilter
-  // );
-
-  const cartState = useShoppingCart(currentUser.uid);
+  useEffectOnce(() => {
+    props.fetchInitialData();
+  });
+  const classes = useStyles();
 
   const [deleteRecipeState, deleteTrigger] = useAsyncFn(
     undoDeleteRecipe(deletedRecipeId),
     [deletedRecipeId]
   );
-  const classes = useStyles();
 
-  if (deleteRecipeState.error || data.error || cartState.error) {
-    return <ErrorPage />;
+  if (props.error) {
+    throw Error("Kunne ikke laste oppskrifter");
   }
-  if (data.loading || cartState.loading || !data.recipes || !cartState.value) {
+  if (props.loading) {
     return <PageProgress />;
   }
   if (deleteRecipeState.value) {
     return <Redirect to={`/recipes/${deletedRecipeId}`} />;
   }
-  const recipes = data.recipes;
-  const shoppingCart = cartState.value;
-  const mappedRecipes = recipes.map(x => ({
-    ...x,
-    isInShoppingCart: shoppingCart
-      ? shoppingCart.recipes.includes(x.id as string)
-      : false
-  }));
 
-  const recipeComponents = mappedRecipes.map(x => (
+  const recipeComponents = props.recipes.map(x => (
     <RecipeListItem recipe={x} key={x.id} />
   ));
   return (
@@ -115,5 +109,9 @@ function RecipeList() {
   );
 }
 
-export { RecipeListBar } from "./RecipeListBar";
+const RecipeList = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RecipeListComponent);
+
 export { RecipeList };
