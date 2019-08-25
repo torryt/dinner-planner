@@ -12,9 +12,7 @@ import { RecipeDetails } from "pages/RecipeDetails";
 import { EditRecipe } from "pages/EditRecipe";
 import { ShoppingCart } from "pages/ShoppingCart";
 import { ErrorBoundary } from "components/ErrorBoundary";
-import rootReducer from "state/reducer";
-
-const store = createStore(rootReducer);
+import { store } from "./state/store";
 
 // const theme = createMuiTheme({
 //   palette: {

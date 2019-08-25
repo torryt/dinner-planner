@@ -1,9 +1,25 @@
 import { firebase } from "../../firebaseSetup";
+import { Recipe } from "types";
 import { User } from "firebase";
-import { getOrCreateUserShoppingCart } from "services/shoppingCarts/shoppingCarts";
 import debugModule from "debug";
+import { getOrCreateUserShoppingCart } from "services/shoppingCarts/shoppingCarts";
 
-const debug = debugModule("dinner-planner:recipe-list");
+const debug = debugModule("dinner-planner:recipes-service");
+
+function fetchRecipes(userId: string) {
+  const db = firebase.firestore();
+  const result = db
+    .collection("recipes")
+    .where("isDeleted", "==", false)
+    .get()
+    .then(x =>
+      x.docs.map(x => ({
+        ...(x.data() as Recipe),
+        id: x.id
+      }))
+    );
+  return result;
+}
 
 function addRecipeToCart(recipeId: string) {
   const db = firebase.firestore();
@@ -48,5 +64,4 @@ function removeRecipeFromCart(recipeId: string) {
       .then(x => ({ success: true }));
   };
 }
-
-export { addRecipeToCart, removeRecipeFromCart };
+export { fetchRecipes, addRecipeToCart, removeRecipeFromCart };

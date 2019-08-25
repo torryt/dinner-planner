@@ -1,2 +1,0 @@
-function getRecipes() {}
-export { getRecipes };

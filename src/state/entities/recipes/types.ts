@@ -20,9 +20,10 @@ interface FetchRecipesStartAction {
   payload: { userId: string };
 }
 
+type RecipeFromApi = Recipe & { id: string };
 interface FetchRecipesSuccessAction {
   type: typeof FETCH_RECIPES_SUCCESS;
-  payload: { recipes: Recipe[] };
+  payload: { recipes: RecipeFromApi[] };
 }
 
 interface FetchRecipesErrorAction {
@@ -36,3 +37,11 @@ export type RecipeActionTypes =
   | FetchRecipesStartAction
   | FetchRecipesSuccessAction
   | FetchRecipesErrorAction;
+
+export interface RecipeState {
+  loading: boolean;
+  error: boolean;
+  errorMessage: string;
+  byId: { [id: string]: Recipe };
+  allIds: string[];
+}

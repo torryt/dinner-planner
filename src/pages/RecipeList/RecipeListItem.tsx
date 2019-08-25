@@ -12,7 +12,8 @@ import { AvTimer, AddShoppingCartOutlined, Done } from "@material-ui/icons";
 import { Recipe } from "types";
 import { useAsyncFn } from "react-use";
 
-import { addRecipeToCart, removeRecipeFromCart } from "./recipeCartFunctions";
+import { addRecipeToCart, removeRecipeFromCart } from "services/recipes";
+
 import debugModule from "debug";
 const debug = debugModule("dinner-planner:recipe-list");
 
@@ -64,9 +65,8 @@ function SecondaryButton(props: {
     removeRecipeFromCart(recipeId as string)
   );
   const removeFromCartStateTrigger = removeFromCartHook[1];
-  const [toggle, setIsInShoppingCart] = useState(isInShoppingCart);
 
-  const transitions = useTransition(toggle, null, {
+  const transitions = useTransition(isInShoppingCart, null, {
     from: { position: "absolute", opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 }
@@ -82,10 +82,7 @@ function SecondaryButton(props: {
             <IsInCartBox
               edge="end"
               aria-label="er i handlevogn"
-              onClick={() => {
-                removeFromCartStateTrigger();
-                setIsInShoppingCart(false);
-              }}
+              onClick={() => removeFromCartStateTrigger()}
             >
               <Done />
             </IsInCartBox>
@@ -95,10 +92,7 @@ function SecondaryButton(props: {
             <IconButton
               edge="end"
               aria-label="legg til handlevogn"
-              onClick={() => {
-                addToCartTrigger();
-                setIsInShoppingCart(true);
-              }}
+              onClick={() => addToCartTrigger()}
             >
               <AddShoppingCartOutlined />
             </IconButton>

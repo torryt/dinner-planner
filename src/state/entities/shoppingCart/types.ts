@@ -1,8 +1,8 @@
-import { Recipe } from "types";
+import { Recipe, ShoppingCart } from "types";
 
-export const FETCH_SHOPPING_CARTS_START = "FETCH_SHOPPING_CARTS_START";
-export const FETCH_SHOPPING_CARTS_SUCCESS = "FETCH_SHOPPING_CARTS_SUCCESS";
-export const FETCH_SHOPPING_CARTS_ERROR = "FETCH_SHOPPING_CARTS_ERROR";
+export const FETCH_SHOPPING_CARTS_START = "FETCH_SHOPPING_CART_START";
+export const FETCH_SHOPPING_CARTS_SUCCESS = "FETCH_SHOPPING_CART_SUCCESS";
+export const FETCH_SHOPPING_CARTS_ERROR = "FETCH_SHOPPING_CART_ERROR";
 
 interface FetchShoppingCartsStartAction {
   type: typeof FETCH_SHOPPING_CARTS_START;
@@ -11,7 +11,7 @@ interface FetchShoppingCartsStartAction {
 
 interface FetchShoppingCartsSuccessAction {
   type: typeof FETCH_SHOPPING_CARTS_SUCCESS;
-  payload: { recipes: Recipe[] };
+  payload: { shoppingCart: ShoppingCart };
 }
 
 interface FetchShoppingCartsErrorAction {
@@ -23,3 +23,10 @@ export type ShoppingCartActionTypes =
   | FetchShoppingCartsStartAction
   | FetchShoppingCartsSuccessAction
   | FetchShoppingCartsErrorAction;
+
+export interface ShoppingCartState {
+  loading: boolean;
+  error: boolean;
+  errorMessage: string;
+  value?: ShoppingCart;
+}
