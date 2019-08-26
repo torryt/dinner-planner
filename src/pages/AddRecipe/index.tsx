@@ -2,28 +2,41 @@ import React, { useState } from "react";
 import { Formik, FormikProps } from "formik";
 import { Recipe } from "types";
 import * as yup from "yup";
-
-import { RecipeForm } from "../../components/RecipeForm";
-import { submitRecipe } from "./submitRecipe";
 import { Redirect } from "react-router";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
+
+import { RecipeForm } from "components/RecipeForm";
 import { ErrorPage } from "components/ErrorPage";
 import { PageWrapper } from "components/PageWrapper";
 import { AddRecipeBar } from "./AddRecipeBar";
+import { submitRecipe as submitRecipeThunk } from "state/entities/recipes/actions";
+import { useEffectOnce } from "react-use";
+import { makeId } from "utils/getId";
+import debugModule from "debug";
+
+const debug = debugModule("dinner-planner:add-recipe");
 
 let validationSchema = yup.object().shape({
   name: yup.string().required()
 });
 
-function AddRecipe() {
-  const [error, setError] = useState(false);
+interface AddRecipeProps {
+  submitRecipe: (recipe: Recipe) => void;
+}
+function AddRecipeComponent(props: AddRecipeProps) {
   const [success, setSuccess] = useState(false);
   const [recipeId, setRecipeId] = useState<string>("");
+  useEffectOnce(() => {
+    setRecipeId(makeId());
+  });
   if (success) {
     return <Redirect to={`/recipes/${recipeId}`} />;
   }
-  if (error) {
-    return <ErrorPage />;
+  if (!recipeId) {
+    return null;
   }
+  debug("Generated recipe id", recipeId);
   return (
     <>
       <Formik
@@ -41,16 +54,9 @@ function AddRecipe() {
           minutesToCook: 30
         }}
         validationSchema={validationSchema}
-        onSubmit={async (values, { setSubmitting }) => {
-          try {
-            const response = await submitRecipe(values);
-            setSubmitting(false);
-            setRecipeId(response.id);
-            setSuccess(true);
-            setError(false);
-          } catch (err) {
-            setError(true);
-          }
+        onSubmit={values => {
+          props.submitRecipe({ ...values, id: recipeId });
+          setSuccess(true);
         }}
         render={(props: FormikProps<Recipe>) => (
           <PageWrapper renderAppBar={AddRecipeBar}>
@@ -62,5 +68,13 @@ function AddRecipe() {
   );
 }
 
-export { AddRecipeBar } from "./AddRecipeBar";
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  submitRecipe: (recipe: Recipe) => dispatch<any>(submitRecipeThunk(recipe))
+});
+
+const AddRecipe = connect(
+  undefined,
+  mapDispatchToProps
+)(AddRecipeComponent);
+
 export { AddRecipe };

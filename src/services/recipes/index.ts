@@ -78,4 +78,29 @@ async function updateRecipe(recipe: Recipe, recipeId: string) {
   }
 }
 
-export { fetchRecipes, addRecipeToCart, removeRecipeFromCart, updateRecipe };
+async function submitRecipe(recipe: Recipe) {
+  const db = firebase.firestore();
+  const currentUser = firebase.auth().currentUser;
+  const userRecipeCollectionResponse = await db
+    .collection("recipeCollections")
+    .where("ownerId", "==", currentUser ? currentUser.uid : "")
+    .get();
+
+  const userRecipeCollectionId = userRecipeCollectionResponse.docs[0].id;
+  const payload = {
+    ...recipe,
+    recipeCollectionId: userRecipeCollectionId
+  };
+  return await db
+    .collection("recipes")
+    .doc(payload.id as string)
+    .set({ ...payload, isDeleted: false });
+}
+
+export {
+  fetchRecipes,
+  addRecipeToCart,
+  removeRecipeFromCart,
+  updateRecipe,
+  submitRecipe
+};

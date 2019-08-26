@@ -8,12 +8,15 @@ import {
   FETCH_RECIPES_ERROR,
   FETCH_RECIPES_SUCCESS,
   UPDATE_RECIPE_ERROR,
-  UPDATE_RECIPE
+  UPDATE_RECIPE,
+  SUBMIT_RECIPE,
+  SUBMIT_RECIPE_ERROR
 } from "./types";
 import { firebase } from "firebaseSetup";
 import {
   fetchRecipes,
-  updateRecipe as updateRecipeAsync
+  updateRecipe as updateRecipeAsync,
+  submitRecipe as submitRecipeAsync
 } from "services/recipes";
 import { Recipe } from "types";
 
@@ -58,4 +61,23 @@ function updateRecipe(
     }
   };
 }
-export { getRecipes, updateRecipe };
+
+function submitRecipe(
+  recipe: Recipe
+): ThunkAction<void, AppState, null, Action<string>> {
+  return async dispatch => {
+    dispatch({
+      type: SUBMIT_RECIPE,
+      payload: { recipe }
+    });
+    try {
+      await submitRecipeAsync(recipe);
+    } catch (error) {
+      dispatch({
+        type: SUBMIT_RECIPE_ERROR,
+        payload: { errorMessage: error, oldRecipe: recipe }
+      });
+    }
+  };
+}
+export { getRecipes, updateRecipe, submitRecipe };

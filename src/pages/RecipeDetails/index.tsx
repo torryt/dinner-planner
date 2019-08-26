@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface RecipeDetailProps extends RouteComponentProps<{ id: string }> {
   recipesById: { [id: string]: Recipe };
+  allRecipeIds: string[];
   loading: boolean;
   error?: string;
   loadRecipes: () => void;
@@ -47,18 +48,17 @@ interface RecipeDetailProps extends RouteComponentProps<{ id: string }> {
 function RecipeDetailsComponent({
   match,
   recipesById,
+  allRecipeIds,
   error,
   loadRecipes
 }: RecipeDetailProps) {
+  useEffectOnce(() => {
+    if (!allRecipeIds.includes(match.params.id)) {
+      loadRecipes();
+    }
+  });
   const classes = useStyles();
   const recipe = recipesById[match.params.id];
-  useEffectOnce(() => {
-    loadRecipes();
-  });
-  // const [recipe, fetchState] = useFetchDocument<Recipe>(
-  //   "recipes",
-  //   props.match.params.id
-  // );
   if (error) {
     return <ErrorPage />;
   }

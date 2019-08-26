@@ -7,6 +7,8 @@ export const FETCH_RECIPES_SUCCESS = "FETCH_RECIPES_SUCCESS";
 export const FETCH_RECIPES_ERROR = "FETCH_RECIPES_ERROR";
 export const UPDATE_RECIPE = "UPDATE_RECIPE";
 export const UPDATE_RECIPE_ERROR = "UPDATE_RECIPE_ERROR";
+export const SUBMIT_RECIPE = "SUBMIT_RECIPE";
+export const SUBMIT_RECIPE_ERROR = "SUBMIT_RECIPE_ERROR";
 
 interface AddRecipeAction {
   type: typeof ADD_RECIPE;
@@ -43,6 +45,16 @@ interface UpdateRecipeErrorAction {
   payload: { errorMessage: string; recipeId: string; oldRecipe: Recipe };
 }
 
+interface SubmitRecipeAction {
+  type: typeof SUBMIT_RECIPE;
+  payload: { recipe: Recipe };
+}
+
+interface SubmitRecipeErrorAction {
+  type: typeof SUBMIT_RECIPE_ERROR;
+  payload: { errorMessage: string; submittedRecipe: Recipe };
+}
+
 export type RecipeActionTypes =
   | AddRecipeAction
   | DeleteRecipeAction
@@ -50,12 +62,15 @@ export type RecipeActionTypes =
   | FetchRecipesSuccessAction
   | FetchRecipesErrorAction
   | UpdateRecipeAction
-  | UpdateRecipeErrorAction;
+  | UpdateRecipeErrorAction
+  | SubmitRecipeAction
+  | SubmitRecipeErrorAction;
 
 export type RecipeDict = { [id: string]: Recipe };
 export interface RecipeState {
   fetchStatus: { loading: boolean; error?: string };
   updateError: { error: boolean; message?: string };
+  submitError: { error: boolean; message?: string };
   byId: RecipeDict;
   allIds: string[];
 }

@@ -21,6 +21,12 @@ function recipesById(
         [action.payload.recipeId]: action.payload.oldRecipe
       };
     }
+    case "SUBMIT_RECIPE":
+      const id = action.payload.recipe.id as string;
+      return {
+        ...state,
+        [id]: action.payload.recipe
+      };
     default:
       return state;
   }
@@ -30,6 +36,8 @@ function allRecipeIds(state: string[] = [], action: RecipeActionTypes) {
   switch (action.type) {
     case "FETCH_RECIPES_SUCCESS":
       return action.payload.recipes.map(x => x.id);
+    case "SUBMIT_RECIPE":
+      return [...state, action.payload.recipe.id as string];
     default:
       return state;
   }
@@ -88,10 +96,35 @@ function updateError(
   }
 }
 
+function submitError(
+  state: { error: boolean; message?: string } = {
+    error: false,
+    message: undefined
+  },
+  action: RecipeActionTypes
+) {
+  switch (action.type) {
+    case "SUBMIT_RECIPE":
+      return {
+        error: false,
+        message: undefined
+      };
+    case "SUBMIT_RECIPE_ERROR": {
+      return {
+        error: true,
+        message: undefined
+      };
+    }
+    default:
+      return state;
+  }
+}
+
 const recipesReducer = combineReducers<RecipeState>({
   byId: recipesById,
   allIds: allRecipeIds,
   fetchStatus,
+  submitError,
   updateError
 });
 
