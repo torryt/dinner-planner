@@ -39,8 +39,11 @@ function getRecipes(): ThunkAction<void, AppState, null, Action<string>> {
   };
 }
 
-function updateRecipe(dispatch: Dispatch) {
-  return async (recipe: Recipe, recipeId: string) => {
+function updateRecipe(
+  recipe: Recipe,
+  recipeId: string
+): ThunkAction<void, AppState, null, Action<string>> {
+  return async dispatch => {
     dispatch({
       type: UPDATE_RECIPE,
       payload: { recipe, recipeId }
