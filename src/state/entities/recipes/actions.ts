@@ -1,6 +1,6 @@
 import { ThunkAction } from "redux-thunk";
 import { AppState } from "state/store";
-import { Action, Dispatch } from "redux";
+import { Action } from "redux";
 import { User } from "firebase";
 
 import {

@@ -7,7 +7,6 @@ import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
 import { RecipeForm } from "components/RecipeForm";
-import { ErrorPage } from "components/ErrorPage";
 import { PageWrapper } from "components/PageWrapper";
 import { AddRecipeBar } from "./AddRecipeBar";
 import { submitRecipe as submitRecipeThunk } from "state/entities/recipes/actions";
