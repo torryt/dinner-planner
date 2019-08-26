@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Form, Field, FieldArray, FormikProps, FieldProps } from "formik";
 import { Button, IconButton, Typography } from "@material-ui/core";
 
-import { TimeSlider } from "../pages/AddRecipe/TimeSlider";
+import { TimeSlider } from "../../pages/AddRecipe/TimeSlider";
 import { Delete } from "@material-ui/icons";
 import { Recipe } from "types";
 import { TextField } from "components/TextField";
@@ -18,7 +18,7 @@ const IngredientRow = styled.div`
 `;
 
 const QuantityField = styled(Field)`
-  max-width: 80px;
+  max-width: 40px;
   margin-right: 1rem;
 `;
 
