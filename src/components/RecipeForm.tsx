@@ -27,7 +27,9 @@ const MeasurementUnitField = styled(Field)`
   margin-right: 1rem;
 `;
 
-const SubmitButton = styled(Button)``;
+const SubmitButton = styled(Button)`
+  margin-bottom: 2rem;
+`;
 
 const AddIngredientButton = styled(Button)`
   margin: 1rem 0 2rem;
