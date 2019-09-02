@@ -1,20 +1,26 @@
 import React from "react";
 import styled from "styled-components";
 import { Form, Field, FieldArray, FormikProps, FieldProps } from "formik";
-import { Button, IconButton, Typography } from "@material-ui/core";
+import { Button, IconButton, Typography, Divider } from "@material-ui/core";
 
 import { TimeSlider } from "../../pages/AddRecipe/TimeSlider";
 import { Delete } from "@material-ui/icons";
 import { Recipe } from "types";
 import { TextField } from "components/TextField";
+import { IngredientCategoryInput } from "./IngredientCategorySelect";
 
 const StyledField = styled(Field)`
   margin-bottom: 2rem;
 `;
 
-const IngredientRow = styled.div`
+const IngredientRow1 = styled.div`
   display: flex;
   align-items: flex-end;
+  margin-bottom: 1rem;
+`;
+
+const IngredientRow2 = styled.div`
+  display: flex;
 `;
 
 const QuantityField = styled(Field)`
@@ -32,7 +38,7 @@ const SubmitButton = styled(Button)`
 `;
 
 const AddIngredientButton = styled(Button)`
-  margin: 1rem 0 2rem;
+  margin-bottom: 2rem;
 `;
 
 const TextAreaWrapper = styled.div`
@@ -41,6 +47,15 @@ const TextAreaWrapper = styled.div`
 
 const StyledNumberOfPortionsField = styled(TextField)`
   margin-bottom: 2rem;
+`;
+
+const IngredientDivider = styled(Divider)`
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+`;
+
+const StyledIngredientCategoryInput = styled(IngredientCategoryInput)`
+  margin-right: 12px;
 `;
 const NumberOfPortionsField = (props: { label: string; field: any }) => {
   return (
@@ -84,34 +99,45 @@ function RecipeForm(props: FormikProps<Recipe>) {
         render={arrayHelpers => (
           <>
             {values.ingredients.map((ingredient, index) => (
-              <IngredientRow key={index}>
-                <QuantityField
-                  name={`ingredients.${index}.quantity`}
-                  label="Antall"
-                  type="number"
-                  component={TextField}
-                />
-                <MeasurementUnitField
-                  name={`ingredients.${index}.measurementUnit`}
-                  label="Måleenhet"
-                  type="text"
-                  component={TextField}
-                />
-                <Field
-                  name={`ingredients.${index}.name`}
-                  label="Navn"
-                  component={TextField}
-                />
-                {index !== 0 && (
-                  <IconButton
-                    aria-label="delete"
-                    onClick={() => arrayHelpers.remove(index)}
-                    size="small"
-                  >
-                    <Delete fontSize="small" />
-                  </IconButton>
+              <>
+                <IngredientRow1 key={index}>
+                  <QuantityField
+                    name={`ingredients.${index}.quantity`}
+                    label="Antall"
+                    type="number"
+                    component={TextField}
+                  />
+                  <MeasurementUnitField
+                    name={`ingredients.${index}.measurementUnit`}
+                    label="Måleenhet"
+                    type="text"
+                    component={TextField}
+                  />
+                  <Field
+                    name={`ingredients.${index}.name`}
+                    label="Navn"
+                    component={TextField}
+                  />
+                </IngredientRow1>
+                <IngredientRow2>
+                  <StyledIngredientCategoryInput
+                    name={`ingredients.${index}.category`}
+                  />
+                  {index !== 0 && (
+                    <IconButton
+                      aria-label="delete"
+                      onClick={() => arrayHelpers.remove(index)}
+                      size="small"
+                    >
+                      <Delete fontSize="small" />
+                    </IconButton>
+                  )}
+                </IngredientRow2>
+
+                {(index !== values.ingredients.length - 1 || true) && (
+                  <IngredientDivider />
                 )}
-              </IngredientRow>
+              </>
             ))}
             <div>
               <AddIngredientButton

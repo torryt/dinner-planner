@@ -6,6 +6,7 @@ import { Redirect } from "react-router";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
+import { ingredientCategories } from "consts";
 import { RecipeForm } from "components/RecipeForm";
 import { PageWrapper } from "components/PageWrapper";
 import { AddRecipeBar } from "./AddRecipeBar";
@@ -46,7 +47,8 @@ function AddRecipeComponent(props: AddRecipeProps) {
             {
               name: "",
               measurementUnit: "stk",
-              quantity: 1
+              quantity: 1,
+              category: ingredientCategories.FRUIT
             }
           ],
           numberOfPortions: 4,

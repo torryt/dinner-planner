@@ -12,6 +12,7 @@ export interface Ingredient {
   name: string;
   measurementUnit: string;
   quantity: number;
+  category?: IngredientCategory;
 }
 
 export interface Recipe {
@@ -37,5 +38,18 @@ export interface ShoppingCart {
   users: string[];
   item: string[];
 }
+
+export type IngredientCategory =
+  | "FRUIT"
+  | "REFRIGIRATED"
+  | "FRESH_PRODUCE"
+  | "PASTRY"
+  | "DAIRY"
+  | "FROZEN_PRODUCE"
+  | "DRINKS"
+  | "DRY_FOOD"
+  | "SNACKS"
+  | "HYGIENE"
+  | "OTHER";
 
 export type WhereFilterOp = "<" | "<=" | "==" | ">=" | ">" | "array-contains";
