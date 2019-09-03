@@ -49,8 +49,8 @@ interface RecipeListProps {
   recipes: (Recipe & { isInShoppingCart: boolean })[];
   ingredientsInCart?: number;
   fetchInitialData: () => void;
-  addRecipeToShoppingCart: () => void;
-  removeRecipeFromShoppingCart: () => void;
+  addToShoppingCart: (recipeId: string) => void;
+  removeFromShoppingCart: (recipeId: string) => void;
 }
 function RecipeListComponent(props: RecipeListProps) {
   const queryParams = parse(window.location.search);
@@ -77,7 +77,12 @@ function RecipeListComponent(props: RecipeListProps) {
   }
 
   const recipeComponents = props.recipes.map(x => (
-    <RecipeListItem recipe={x} key={x.id} />
+    <RecipeListItem
+      recipe={x}
+      key={x.id}
+      addRecipe={props.addToShoppingCart}
+      removeRecipe={props.removeFromShoppingCart}
+    />
   ));
   return (
     <PageWrapper renderAppBar={() => <RecipeListBar />}>

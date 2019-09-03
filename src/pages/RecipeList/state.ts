@@ -1,10 +1,17 @@
 import { AppState } from "state/store";
 import { Dispatch } from "redux";
 import { getRecipes } from "state/entities/recipes/actions";
-import { getShoppingCart } from "state/entities/shoppingCart/actions";
+import {
+  getShoppingCart,
+  addRecipeItems
+} from "state/entities/shoppingCart/actions";
+import { makeId } from "utils/getId";
 
 function mapRecipeListRecipes(state: AppState) {
-  if (state.recipes.allIds.length === 0 || !state.shoppingCart.value) {
+  if (
+    state.recipes.allIds.length === 0 ||
+    !state.shoppingCart.fetchStatus.success
+  ) {
     return [];
   }
   return state.recipes.allIds.map(x => ({
@@ -16,15 +23,19 @@ function mapRecipeListRecipes(state: AppState) {
 
 function isRecipeListLoading(state: AppState) {
   return (
-    (state.recipes.fetchStatus.loading || state.shoppingCart.loading) &&
-    (!state.shoppingCart.value && state.recipes.allIds.length === 0)
+    (state.recipes.fetchStatus.loading ||
+      state.shoppingCart.fetchStatus.loading) &&
+    (!state.shoppingCart.fetchStatus.success &&
+      state.recipes.allIds.length === 0)
   );
 }
 
 function mapStateToProps(state: AppState) {
   return {
     loading: isRecipeListLoading(state),
-    error: !!state.recipes.fetchStatus.error || state.shoppingCart.error,
+    error:
+      !!state.recipes.fetchStatus.error ||
+      !!state.shoppingCart.fetchStatus.error,
     recipes: mapRecipeListRecipes(state),
     ingredientsInCart: undefined
   };
@@ -36,8 +47,16 @@ function mapDispatchToProps(dispatch: Dispatch, getState: () => AppState) {
       dispatch<any>(getRecipes());
       dispatch<any>(getShoppingCart());
     },
-    addToShoppingCart: () => {},
-    removeFromShoppingCart: () => {}
+    removeFromShoppingCart: (recipeId: string) => {},
+    addToShoppingCart: (recipeId: string) => {
+      const ingredients = getState().recipes.byId[recipeId].ingredients;
+      const shoppingCartItems = ingredients.map(x => ({
+        id: makeId(),
+        ...x,
+        recipeId: recipeId
+      }));
+      dispatch<any>(addRecipeItems(shoppingCartItems));
+    }
   };
 }
 

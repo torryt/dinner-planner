@@ -26,17 +26,17 @@ export interface Recipe {
 
 export interface ShoppingCartItem {
   id: string;
-  shoppingCartId: string;
-  ingredientId: string;
+  shoppingCartId?: string;
+  ingredientId?: string;
   recipeId?: string;
   quantity: number;
-  measurementUnit: MeasurementUnit;
+  measurementUnit: string;
 }
 
 export interface ShoppingCart {
   id: string;
   users: string[];
-  item: string[];
+  items: ShoppingCartItem[];
 }
 
 export type IngredientCategory =
@@ -53,3 +53,10 @@ export type IngredientCategory =
   | "OTHER";
 
 export type WhereFilterOp = "<" | "<=" | "==" | ">=" | ">" | "array-contains";
+
+export type FetchStatus = {
+  loading: boolean;
+  error: boolean;
+  success: boolean;
+  errorMessage: string;
+};

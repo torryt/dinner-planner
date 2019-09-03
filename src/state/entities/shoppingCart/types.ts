@@ -1,32 +1,47 @@
-import { ShoppingCart } from "types";
+import { createAction } from "redux-starter-kit";
+import { ShoppingCart, ShoppingCartItem, FetchStatus } from "types";
 
-export const FETCH_SHOPPING_CART_START = "FETCH_SHOPPING_CART_START";
-export const FETCH_SHOPPING_CART_SUCCESS = "FETCH_SHOPPING_CART_SUCCESS";
-export const FETCH_SHOPPING_CART_ERROR = "FETCH_SHOPPING_CART_ERROR";
+export const fetchShoppingCartStart = createAction("shoppingCart/fetch/start");
+export const fetchShoppingCartSuccess = createAction(
+  "shoppingCart/fetch/success"
+);
+export const fetchShoppingCartError = createAction("shoppingCart/fetch/error");
+export const addRecipeItems = createAction("shoppingCart/recipe/add");
+// export const FETCH_SHOPPING_CART_START = "FETCH_SHOPPING_CART_START";
+// export const FETCH_SHOPPING_CART_SUCCESS = "FETCH_SHOPPING_CART_SUCCESS";
+// export const FETCH_SHOPPING_CART_ERROR = "FETCH_SHOPPING_CART_ERROR";
+// export const ADD_RECIPE_ITEMS = "ADD_RECIPE_ITEMS";
 
-interface FetchShoppingCartsStartAction {
-  type: typeof FETCH_SHOPPING_CART_START;
+export interface FetchShoppingCartsStartAction {
+  type: typeof fetchShoppingCartStart.type;
   payload: { userId: string };
 }
 
-interface FetchShoppingCartsSuccessAction {
-  type: typeof FETCH_SHOPPING_CART_SUCCESS;
+export interface FetchShoppingCartsSuccessAction {
+  type: typeof fetchShoppingCartSuccess.type;
   payload: { shoppingCart: ShoppingCart };
 }
 
-interface FetchShoppingCartsErrorAction {
-  type: typeof FETCH_SHOPPING_CART_ERROR;
+export interface FetchShoppingCartsErrorAction {
+  type: typeof fetchShoppingCartError.type;
   payload: { message: string };
+}
+
+export interface AddRecipeItemsAction {
+  type: typeof addRecipeItems.type;
+  payload: { items: ShoppingCartItem[] };
 }
 
 export type ShoppingCartActionTypes =
   | FetchShoppingCartsStartAction
   | FetchShoppingCartsSuccessAction
-  | FetchShoppingCartsErrorAction;
+  | FetchShoppingCartsErrorAction
+  | AddRecipeItemsAction;
 
 export interface ShoppingCartState {
-  loading: boolean;
-  error: boolean;
-  errorMessage: string;
-  value?: ShoppingCart;
+  fetchStatus: FetchStatus;
+  itemsById: { [id: string]: ShoppingCartItem };
+  allItemIds: string[];
+  users: string[];
+  id: string | null;
 }

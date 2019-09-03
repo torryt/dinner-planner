@@ -4,33 +4,38 @@ import { Action } from "redux";
 import { User } from "firebase";
 
 import {
-  FETCH_SHOPPING_CART_ERROR,
-  FETCH_SHOPPING_CART_START,
-  FETCH_SHOPPING_CART_SUCCESS
+  fetchShoppingCartStart,
+  fetchShoppingCartSuccess,
+  fetchShoppingCartError
 } from "./types";
 import { firebase } from "firebaseSetup";
 import { getOrCreateUserShoppingCart } from "services/shoppingCarts";
+import { ShoppingCartItem } from "types";
 
 function getShoppingCart(): ThunkAction<void, AppState, null, Action<string>> {
   return async dispatch => {
     const currentUser = firebase.auth().currentUser as User;
-    dispatch({
-      type: FETCH_SHOPPING_CART_START
-    });
+    fetchShoppingCartStart();
     try {
       const shoppingCart = await getOrCreateUserShoppingCart(currentUser.uid);
-      dispatch({
-        type: FETCH_SHOPPING_CART_SUCCESS,
-        payload: { shoppingCart }
-      });
+      fetchShoppingCartSuccess({ shoppingCart });
       return shoppingCart;
     } catch (error) {
-      dispatch({
-        type: FETCH_SHOPPING_CART_ERROR,
-        payload: { message: error }
-      });
+      fetchShoppingCartError({ message: error });
     }
   };
 }
 
-export { getShoppingCart };
+function addRecipeItems(
+  recipeItems: ShoppingCartItem[]
+): ThunkAction<void, AppState, null, Action<string>> {
+  return async dispatch => {};
+}
+
+export {
+  getShoppingCart,
+  addRecipeItems,
+  fetchShoppingCartStart,
+  fetchShoppingCartSuccess,
+  fetchShoppingCartError
+};

@@ -10,9 +10,6 @@ import {
 import { AdapterLink } from "components/Link";
 import { AvTimer, AddShoppingCartOutlined, Done } from "@material-ui/icons";
 import { Recipe } from "types";
-import { useAsyncFn } from "react-use";
-
-import { addRecipeToCart, removeRecipeFromCart } from "services/recipes";
 
 import debugModule from "debug";
 const debug = debugModule("dinner-planner:recipe-list");
@@ -55,25 +52,17 @@ const ButtonWrapper = styled.div`
 function SecondaryButton(props: {
   isInShoppingCart: boolean;
   recipeId: string;
+  addRecipe: (recipeId: string) => void;
+  removeRecipe: (recipeId: string) => void;
 }) {
-  const { isInShoppingCart, recipeId } = props;
+  const { isInShoppingCart, recipeId, addRecipe, removeRecipe } = props;
   debug("Secondary button props", props);
-  const [addToCartState, addToCartTrigger] = useAsyncFn(
-    addRecipeToCart(recipeId as string)
-  );
-  const removeFromCartHook = useAsyncFn(
-    removeRecipeFromCart(recipeId as string)
-  );
-  const removeFromCartStateTrigger = removeFromCartHook[1];
 
   const transitions = useTransition(isInShoppingCart, null, {
     from: { position: "absolute", opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 }
   });
-  if (addToCartState.error) {
-    throw Error("Could not add recipe to shopping cart");
-  }
   return (
     <ButtonWrapper>
       {transitions.map(({ item, key, props }) =>
@@ -82,7 +71,7 @@ function SecondaryButton(props: {
             <IsInCartBox
               edge="end"
               aria-label="er i handlevogn"
-              onClick={() => removeFromCartStateTrigger()}
+              onClick={() => removeRecipe(recipeId)}
             >
               <Done />
             </IsInCartBox>
@@ -92,7 +81,7 @@ function SecondaryButton(props: {
             <IconButton
               edge="end"
               aria-label="legg til handlevogn"
-              onClick={() => addToCartTrigger()}
+              onClick={() => addRecipe(recipeId)}
             >
               <AddShoppingCartOutlined />
             </IconButton>
@@ -105,6 +94,8 @@ function SecondaryButton(props: {
 
 interface RecipeComponentProps {
   recipe: Recipe & { isInShoppingCart: boolean };
+  addRecipe: (recipeId: string) => void;
+  removeRecipe: (recipeId: string) => void;
 }
 export function RecipeListItem(props: RecipeComponentProps) {
   return (
@@ -128,6 +119,8 @@ export function RecipeListItem(props: RecipeComponentProps) {
           <SecondaryButton
             recipeId={props.recipe.id as string}
             isInShoppingCart={props.recipe.isInShoppingCart}
+            addRecipe={props.addRecipe}
+            removeRecipe={props.removeRecipe}
           />
         </>
       </ListItemSecondaryAction>
